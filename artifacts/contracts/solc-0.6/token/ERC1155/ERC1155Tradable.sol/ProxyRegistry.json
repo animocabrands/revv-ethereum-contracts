@@ -1,0 +1,30 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "ProxyRegistry",
+  "sourceName": "contracts/solc-0.6/token/ERC1155/ERC1155Tradable.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "proxies",
+      "outputs": [
+        {
+          "internalType": "contract OwnableDelegateProxy",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b5060e48061001f6000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c8063c455279114602d575b600080fd5b605d60048036036020811015604157600080fd5b503573ffffffffffffffffffffffffffffffffffffffff166086565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b60006020819052908152604090205473ffffffffffffffffffffffffffffffffffffffff168156fea2646970667358221220575c87bf9bd1e8b0a21251630694766c5d038e90b999fa8ffdb6188110f18a5f64736f6c63430006080033",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060285760003560e01c8063c455279114602d575b600080fd5b605d60048036036020811015604157600080fd5b503573ffffffffffffffffffffffffffffffffffffffff166086565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b60006020819052908152604090205473ffffffffffffffffffffffffffffffffffffffff168156fea2646970667358221220575c87bf9bd1e8b0a21251630694766c5d038e90b999fa8ffdb6188110f18a5f64736f6c63430006080033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

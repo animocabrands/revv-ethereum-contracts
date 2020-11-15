@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "OwnableDelegateProxy",
+  "sourceName": "contracts/solc-0.6/token/ERC1155/ERC1155Tradable.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220574ba17706b4e563a45674177100da74e67f2b316f94e3a7a073fdada3e2c63764736f6c63430006080033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220574ba17706b4e563a45674177100da74e67f2b316f94e3a7a073fdada3e2c63764736f6c63430006080033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

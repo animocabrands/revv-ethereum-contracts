@@ -1,0 +1,15 @@
+.vscode/*
+!.vscode/settings.json.default
+!.vscode/launch.json.default
+!.vscode/extensions.json.default
+
+cache/
+artifacts/*
+!artifacts/contracts/
+contractsInfo.json
+
+coverage*
+
+node_modules/
+
+yarn.error.log
