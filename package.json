@@ -1,6 +1,6 @@
 {
   "name": "@animocabrands/revv-ethereum-contracts",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "REVV Solidity Contracts",
   "repository": "git@gitlab.outblaze.net:revv/ethereum/contracts/revv-ethereum-contracts.git",
   "author": "Animoca Brands",
