@@ -58,7 +58,7 @@ describe('REVVSale', function () {
         .withArgs(contracts.sale.address, purchaser.address, utils.parseEther('1'));
     });
 
-    it('should purchase successfully with DAI' + i, async function () {
+    it('should purchase successfully with DAI', async function () {
       const {contracts, params} = await loadFixture(initContractsAndMintNft);
 
       const quantity = constants.One;

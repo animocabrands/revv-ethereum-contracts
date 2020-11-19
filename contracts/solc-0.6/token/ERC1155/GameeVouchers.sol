@@ -2,24 +2,81 @@
 
 pragma solidity ^0.6.8;
 
-import "./ERC1155Tradable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@animoca/ethereum-contracts-core_library/contracts/access/MinterRole.sol";
+import "@animoca/ethereum-contracts-core_library/contracts/utils/types/UInt256ToDecimalString.sol";
+import "@animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/ERC1155Inventory.sol";
 
-contract GameeVouchers is ERC1155Tradable {
-    constructor(address proxyContractAddress) public ERC1155Tradable("GMEE Vouchers", "GMEE_vouch", proxyContractAddress) {}
+contract GameeVouchers is ERC1155Inventory, Ownable, MinterRole {
+    using UInt256ToDecimalString for uint256;
 
-    /**
-     * @notice Mint tokens for each ids in _ids
-     * @param _to       The address to mint tokens to
-     * @param _ids      Array of ids to mint
-     * @param _amounts  Array of amount of tokens to mint per id
-     * @param _data    Data to pass if receiver is contract
-     */
+    string public name = "GameeVouchers";
+    string public symbol = "GameeVouchers";
+
+    string internal _baseMetadataURI;
+
+    constructor(address proxyContractAddress) public ERC1155Inventory() {}
+
+    function createCollection(uint256 collectionId) external onlyOwner {
+        _createCollection(collectionId);
+    }
+
+    function setBaseMetadataURI(string calldata baseMetadataURI) external onlyOwner {
+        _baseMetadataURI = baseMetadataURI;
+    }
+
     function batchMint(
-        address _to,
-        uint256[] memory _ids,
-        uint256[] memory _amounts,
-        bytes memory _data
-    ) public onlyOwner {
-        _batchMint(_to, _ids, _amounts, _data);
+        address to,
+        uint256[] memory ids,
+        uint256[] memory values,
+        bytes memory data
+    ) public onlyMinter {
+        _batchMint(to, ids, values, data, false);
+    }
+
+    function safeBatchMint(
+        address to,
+        uint256[] memory ids,
+        uint256[] memory values,
+        bytes memory data
+    ) public onlyMinter {
+        _batchMint(to, ids, values, data, true);
+    }
+
+    function sameNFTCollectionBatchMint(address to, uint256[] memory ids) public onlyMinter {
+        _sameNFTCollectionBatchMint(to, ids, "", false);
+    }
+
+    function sameNFTCollectionSafeBatchMint(
+        address to,
+        uint256[] memory ids,
+        bytes memory data
+    ) public onlyMinter {
+        _sameNFTCollectionBatchMint(to, ids, data, true);
+    }
+
+    function burnFrom(
+        address from,
+        uint256 id,
+        uint256 value
+    ) external {
+        bool batch = false;
+        _burnFrom(from, id, value, batch);
+    }
+
+    function batchBurnFrom(
+        address from,
+        uint256[] calldata ids,
+        uint256[] calldata values
+    ) external {
+        _batchBurnFrom(from, ids, values);
+    }
+
+    function sameNFTCollectionBatchBurnFrom(address from, uint256[] calldata nftIds) external {
+        _sameNFTCollectionBatchBurnFrom(from, nftIds);
+    }
+
+    function _uri(uint256 id) internal override view returns (string memory) {
+        return string(abi.encodePacked("https://prefix/json/", id.toDecimalString()));
     }
 }
