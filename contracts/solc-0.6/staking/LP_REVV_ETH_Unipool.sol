@@ -41,7 +41,7 @@ contract LPTokenWrapper {
     }
 }
 
-contract Unipool is LPTokenWrapper, IRewardDistributionRecipient {
+contract LP_REVV_ETH_Unipool is LPTokenWrapper, IRewardDistributionRecipient {
     uint256 public immutable DURATION;
 
     uint256 public periodFinish = 0;

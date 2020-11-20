@@ -45,7 +45,7 @@ contract LPTokenWrapper {
     }
 }
 
-contract Unipool is LPTokenWrapper, IRewardDistributionRecipient {
+contract LP_REVV_SAND_Unipool is LPTokenWrapper, IRewardDistributionRecipient {
     uint256 public immutable DURATION;
     IERC20Mintable public immutable rewardToken;
 

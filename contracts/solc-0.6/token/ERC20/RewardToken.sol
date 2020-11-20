@@ -13,13 +13,6 @@ contract RewardToken is ERC20WithOperators, MinterRole {
     string public constant override symbol = "RT";
     uint8 public constant override decimals = 18;
 
-    constructor(address[] memory holders, uint256[] memory amounts) public ERC20WithOperators() {
-        require(holders.length == amounts.length, "REVV: wrong arguments");
-        for (uint256 i = 0; i < holders.length; ++i) {
-            _mint(holders[i], amounts[i]);
-        }
-    }
-
     function mint(address holder, uint256 amount) public onlyMinter {
         _mint(holder, amount);
     }
