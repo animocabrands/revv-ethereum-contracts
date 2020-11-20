@@ -4,7 +4,7 @@
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /*
  * @dev Provides information about the current execution context, including the
@@ -32,7 +32,7 @@ abstract contract Context {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /**
  * @dev Contract module which provides a basic access control mechanism, where
@@ -103,7 +103,7 @@ contract Ownable is Context {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /**
  * @dev Library for managing
@@ -350,7 +350,7 @@ library EnumerableSet {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.2;
+pragma solidity ^0.6.2;
 
 /**
  * @dev Collection of functions related to the address type
@@ -495,7 +495,7 @@ library Address {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 
 
@@ -710,31 +710,102 @@ abstract contract AccessControl is Context {
 }
 
 
-// File @openzeppelin/contracts/introspection/IERC165.sol@v3.2.0
+// File @animoca/ethereum-contracts-core_library/contracts/access/MinterRole.sol@v3.1.1
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity 0.6.8;
 
 /**
- * @dev Interface of the ERC165 standard, as defined in the
- * https://eips.ethereum.org/EIPS/eip-165[EIP].
+ * Contract module which allows derived contracts access control over token
+ * minting operations.
  *
- * Implementers can declare support of contract interfaces, which can then be
- * queried by others ({ERC165Checker}).
- *
- * For an implementation, see {ERC165}.
+ * This module is used through inheritance. It will make available the modifier
+ * `onlyMinter`, which can be applied to the minting functions of your contract.
+ * Those functions will only be accessible to accounts with the minter role
+ * once the modifer is put in place.
  */
-interface IERC165 {
+contract MinterRole is AccessControl {
+
+    event MinterAdded(address indexed account);
+    event MinterRemoved(address indexed account);
+
     /**
-     * @dev Returns true if this contract implements the interface defined by
-     * `interfaceId`. See the corresponding
-     * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section]
-     * to learn more about how these ids are created.
-     *
-     * This function call must use less than 30 000 gas.
+     * Modifier to make a function callable only by accounts with the minter role.
      */
-    function supportsInterface(bytes4 interfaceId) external view returns (bool);
+    modifier onlyMinter() {
+        require(isMinter(_msgSender()), "MinterRole: caller does not have the Minter role");
+        _;
+    }
+
+    /**
+     * Constructor.
+     */
+    constructor () internal {
+        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+        emit MinterAdded(_msgSender());
+    }
+
+    /**
+     * Validates whether or not the given account has been granted the minter role.
+     * @param account The account to validate.
+     * @return True if the account has been granted the minter role, false otherwise.
+     */
+    function isMinter(address account) public view returns (bool) {
+        require(account != address(0), "MinterRole: address zero cannot be minter");
+        return hasRole(DEFAULT_ADMIN_ROLE, account);
+    }
+
+    /**
+     * Grants the minter role to a non-minter.
+     * @param account The account to grant the minter role to.
+     */
+    function addMinter(address account) public onlyMinter {
+        require(!isMinter(account), "MinterRole: add an account already minter");
+        grantRole(DEFAULT_ADMIN_ROLE, account);
+        emit MinterAdded(account);
+    }
+
+    /**
+     * Renounces the granted minter role.
+     */
+    function renounceMinter() public onlyMinter {
+        renounceRole(DEFAULT_ADMIN_ROLE, _msgSender());
+        emit MinterRemoved(_msgSender());
+    }
+
+}
+
+
+// File @animoca/ethereum-contracts-core_library/contracts/utils/types/UInt256ToDecimalString.sol@v3.1.1
+
+// SPDX-License-Identifier: MIT
+
+pragma solidity 0.6.8;
+
+library UInt256ToDecimalString {
+
+    function toDecimalString(uint256 value) internal pure returns (string memory) {
+        // Inspired by OpenZeppelin's String.toString() implementation - MIT licence
+        // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/8b10cb38d8fedf34f2d89b0ed604f2dceb76d6a9/contracts/utils/Strings.sol
+        if (value == 0) {
+            return "0";
+        }
+        uint256 temp = value;
+        uint256 digits;
+        while (temp != 0) {
+            digits++;
+            temp /= 10;
+        }
+        bytes memory buffer = new bytes(digits);
+        uint256 index = digits - 1;
+        temp = value;
+        while (temp != 0) {
+            buffer[index--] = byte(uint8(48 + temp % 10));
+            temp /= 10;
+        }
+        return string(buffer);
+    }
 }
 
 
@@ -742,7 +813,7 @@ interface IERC165 {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow
@@ -901,11 +972,95 @@ library SafeMath {
 }
 
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155.sol@v4.0.0
+// File @openzeppelin/contracts/introspection/IERC165.sol@v3.2.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity ^0.6.0;
+
+/**
+ * @dev Interface of the ERC165 standard, as defined in the
+ * https://eips.ethereum.org/EIPS/eip-165[EIP].
+ *
+ * Implementers can declare support of contract interfaces, which can then be
+ * queried by others ({ERC165Checker}).
+ *
+ * For an implementation, see {ERC165}.
+ */
+interface IERC165 {
+    /**
+     * @dev Returns true if this contract implements the interface defined by
+     * `interfaceId`. See the corresponding
+     * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section]
+     * to learn more about how these ids are created.
+     *
+     * This function call must use less than 30 000 gas.
+     */
+    function supportsInterface(bytes4 interfaceId) external view returns (bool);
+}
+
+
+// File @openzeppelin/contracts/introspection/ERC165.sol@v3.2.0
+
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.6.0;
+
+/**
+ * @dev Implementation of the {IERC165} interface.
+ *
+ * Contracts may inherit from this and call {_registerInterface} to declare
+ * their support of an interface.
+ */
+contract ERC165 is IERC165 {
+    /*
+     * bytes4(keccak256('supportsInterface(bytes4)')) == 0x01ffc9a7
+     */
+    bytes4 private constant _INTERFACE_ID_ERC165 = 0x01ffc9a7;
+
+    /**
+     * @dev Mapping of interface ids to whether or not it's supported.
+     */
+    mapping(bytes4 => bool) private _supportedInterfaces;
+
+    constructor () internal {
+        // Derived contracts need only register support for their own interfaces,
+        // we register support for ERC165 itself here
+        _registerInterface(_INTERFACE_ID_ERC165);
+    }
+
+    /**
+     * @dev See {IERC165-supportsInterface}.
+     *
+     * Time complexity O(1), guaranteed to always use less than 30 000 gas.
+     */
+    function supportsInterface(bytes4 interfaceId) public view override returns (bool) {
+        return _supportedInterfaces[interfaceId];
+    }
+
+    /**
+     * @dev Registers the contract as an implementer of the interface defined by
+     * `interfaceId`. Support of the actual ERC165 interface is automatic and
+     * registering its interface id is not required.
+     *
+     * See {IERC165-supportsInterface}.
+     *
+     * Requirements:
+     *
+     * - `interfaceId` cannot be the ERC165 invalid interface (`0xffffffff`).
+     */
+    function _registerInterface(bytes4 interfaceId) internal virtual {
+        require(interfaceId != 0xffffffff, "ERC165: invalid interface id");
+        _supportedInterfaces[interfaceId] = true;
+    }
+}
+
+
+// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155.sol@v5.0.0
+
+// SPDX-License-Identifier: MIT
+
+pragma solidity 0.6.8;
 
 /**
  * @title ERC-1155 Multi Token Standard, basic interface
@@ -1024,11 +1179,138 @@ interface IERC1155 {
 }
 
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155TokenReceiver.sol@v4.0.0
+// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155MetadataURI.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
+
+/**
+ * @title ERC-1155 Multi Token Standard, optional metadata URI extension
+ * @dev See https://eips.ethereum.org/EIPS/eip-1155
+ * Note: The ERC-165 identifier for this interface is 0x0e89341c.
+ */
+interface IERC1155MetadataURI {
+    /**
+     * @notice A distinct Uniform Resource Identifier (URI) for a given token.
+     * @dev URIs are defined in RFC 3986.
+     * The URI MUST point to a JSON file that conforms to the "ERC-1155 Metadata URI JSON Schema".
+     * The uri function SHOULD be used to retrieve values if no event was emitted.
+     * The uri function MUST return the same value as the latest event for an _id if it was emitted.
+     * The uri function MUST NOT be used to check for the existence of a token as it is possible for an implementation to return a valid string even if the token does not exist.
+     * @return URI string
+     */
+    function uri(uint256 id) external view returns (string memory);
+}
+
+
+// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155Inventory.sol@v5.0.0
+
+// SPDX-License-Identifier: MIT
+
+pragma solidity 0.6.8;
+
+
+/**
+ * @title ERC-1155 Multi Token Standard, optional Asset Collections extension
+ * @dev See https://eips.ethereum.org/EIPS/eip-xxxx
+ * Interface for fungible/non-fungible collections management on a 1155-compliant contract.
+ * This proposal attempts to rationalize the co-existence of fungible and non-fungible tokens
+ * within the same contract. We consider that there 3 types of identifiers:
+ * (a) Fungible Collections identifiers, each representing a set of Fungible Tokens,
+ * (b) Non-Fungible Collections identifiers, each representing a set of Non-Fungible Tokens,
+ * (c) Non-Fungible Tokens identifiers. 
+
+
+ * In the same way a fungible token (represented by its balance) belongs to a particular id
+ * which can be used to store common information about this token, including the metadata.
+ *
+ * Note: The ERC-165 identifier for this interface is 0x469bd23f.
+ */
+interface IERC1155Inventory {
+
+    /**
+     * Event emitted when a collection is created.
+     *  This event SHOULD NOT be emitted twice for the same `id`.
+     * 
+     *  The parameters in the functions `collectionOf` and `ownerOf` are required to be
+     *  non-fungible token identifiers, so they should not be called with any collection
+     *  identifiers, else they will revert.
+     * 
+     *  On the contrary, the functions `balanceOf`, `balanceOfBatch` and `totalSupply` are
+     *  best used with collection identifiers, which will return meaningful information for
+     *  the owner.
+     */
+    event CollectionCreated (uint256 indexed collectionId, bool indexed fungible);
+
+    /**
+     * Retrieves the owner of a non-fungible token.
+     * @dev Reverts if `nftId` is owned by the zero address. // ERC721 compatibility
+     * @dev Reverts if `nftId` does not represent a non-fungible token.
+     * @param nftId The token identifier to query.
+     * @return Address of the current owner of the token.
+     */
+    function ownerOf(uint256 nftId) external view returns (address);
+
+    /**
+     * Retrieves the total supply of `id`.
+     *  If `id` represents a fungible or non-fungible collection, returns the supply of tokens for this collection.
+     *  If `id` represents a non-fungible token, returns 1 if the token exists, else 0.
+     * @param id The identifier for which to retrieve the supply of.
+     * @return The supplies for each identifier in `ids`.
+     */
+    function totalSupply(uint256 id) external view returns (uint256);
+
+    /**
+     * Introspects whether or not `id` represents a fungible collection.
+     *  This function MUST return true even for a fungible collections which is not-yet created.
+     * @param id The identifier to query.
+     * @return bool True if `id` represents a fungible collection, false otherwise.
+     */
+    function isFungible(uint256 id) external pure returns (bool);
+
+    /**
+     * Introspects the non-fungible collection to which `nftId` belongs.
+     *  This function MUST return a value representing a non-fungible collection.
+     *  This function MUST return a value for a non-existing token, and SHOULD NOT be used to check the existence of a non-fungible token.
+     * @dev Reverts if `nftId` does not represent a non-fungible token.
+     * @param nftId The token identifier to query the collection of.
+     * @return uint256 the non-fungible collection identifier to which `nftId` belongs.
+     */
+    function collectionOf(uint256 nftId) external pure returns (uint256);
+
+    /**
+     * @notice this definition replaces the original {ERC1155-balanceOf}.
+     * Retrieves the balance of `id` owned by account `owner`.
+     *  If `id` represents a fungible or non-fungible collection, returns the balance of tokens for this collection.
+     *  If `id` represents a non-fungible token, returns 1 if the token is owned by `owner`, else 0.
+     * @param owner The account to retrieve the balance of.
+     * @param id The identifier to retrieve the balance of.
+     * @return The balance of `id` owned by account `owner`.
+     */
+    // function balanceOf(address owner, uint256 id) external view returns (uint256);
+
+    /**
+     * @notice this definition replaces the original {ERC1155-balanceOfBatch}.
+     * Retrieves the balances of `ids` owned by accounts `owners`. For each pair:
+     *  if `id` represents a fungible or non-fungible collection, returns the balance of tokens for this collection,
+     *  if `id` represents a non-fungible token, returns 1 if the token is owned by `owner`, else 0.
+     * @param owners The addresses of the token holders
+     * @param ids The identifiers to retrieve the balance of.
+     * @return The balances of `ids` owned by accounts `owners`.
+     */
+    // function balanceOfBatch(
+    //     address[] calldata owners,
+    //     uint256[] calldata ids
+    // ) external view returns (uint256[] memory);
+}
+
+
+// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155TokenReceiver.sol@v5.0.0
+
+// SPDX-License-Identifier: MIT
+
+pragma solidity 0.6.8;
 
 /**
  * @title ERC-1155 Multi Token Standard, token receiver
@@ -1082,78 +1364,12 @@ interface IERC1155TokenReceiver {
 }
 
 
-// File @animoca/ethereum-contracts-core_library/contracts/access/MinterRole.sol@v3.1.1
+// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/ERC1155Inventory.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
-/**
- * Contract module which allows derived contracts access control over token
- * minting operations.
- *
- * This module is used through inheritance. It will make available the modifier
- * `onlyMinter`, which can be applied to the minting functions of your contract.
- * Those functions will only be accessible to accounts with the minter role
- * once the modifer is put in place.
- */
-contract MinterRole is AccessControl {
-
-    event MinterAdded(address indexed account);
-    event MinterRemoved(address indexed account);
-
-    /**
-     * Modifier to make a function callable only by accounts with the minter role.
-     */
-    modifier onlyMinter() {
-        require(isMinter(_msgSender()), "MinterRole: caller does not have the Minter role");
-        _;
-    }
-
-    /**
-     * Constructor.
-     */
-    constructor () internal {
-        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-        emit MinterAdded(_msgSender());
-    }
-
-    /**
-     * Validates whether or not the given account has been granted the minter role.
-     * @param account The account to validate.
-     * @return True if the account has been granted the minter role, false otherwise.
-     */
-    function isMinter(address account) public view returns (bool) {
-        require(account != address(0), "MinterRole: address zero cannot be minter");
-        return hasRole(DEFAULT_ADMIN_ROLE, account);
-    }
-
-    /**
-     * Grants the minter role to a non-minter.
-     * @param account The account to grant the minter role to.
-     */
-    function addMinter(address account) public onlyMinter {
-        require(!isMinter(account), "MinterRole: add an account already minter");
-        grantRole(DEFAULT_ADMIN_ROLE, account);
-        emit MinterAdded(account);
-    }
-
-    /**
-     * Renounces the granted minter role.
-     */
-    function renounceMinter() public onlyMinter {
-        renounceRole(DEFAULT_ADMIN_ROLE, _msgSender());
-        emit MinterRemoved(_msgSender());
-    }
-
-}
-
-
-// File contracts/solc-0.6/token/ERC1155/ERC1155Tradable.sol
-
-// SPDX-License-Identifier: MIT
-
- solidity ^0.6.8;
 
 
 
@@ -1162,689 +1378,725 @@ contract MinterRole is AccessControl {
 
 
 /**
- * @dev Implementation of Multi-Token Standard contract
+ * @title ERC1155Inventory, a contract which manages up to multiple Collections of Fungible and Non-Fungible Tokens
+ * @dev In this implementation, with N representing the Non-Fungible Collection mask length, identifiers can represent either:
+ * (a) a Fungible Collection:
+ *     - most significant bit == 0
+ * (b) a Non-Fungible Collection:
+ *     - most significant bit == 1
+ *     - (256-N) least significant bits == 0
+ * (c) a Non-Fungible Token:
+ *     - most significant bit == 1
+ *     - (256-N) least significant bits != 0
  */
-contract ERC1155 is IERC165 {
-    using SafeMath for uint256;
+abstract contract ERC1155Inventory is IERC1155, IERC1155MetadataURI, IERC1155Inventory, ERC165, Context {
     using Address for address;
+    using SafeMath for uint256;
 
-    /***********************************|
-    |        Variables and Events       |
-    |__________________________________*/
+    // bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))
+    bytes4 internal constant _ERC1155_RECEIVED = 0xf23a6e61;
 
-    // onReceive function signatures
-    bytes4 internal constant ERC1155_RECEIVED_VALUE = 0xf23a6e61;
-    bytes4 internal constant ERC1155_BATCH_RECEIVED_VALUE = 0xbc197c81;
+    // bytes4(keccak256("onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)"))
+    bytes4 internal constant _ERC1155_BATCH_RECEIVED = 0xbc197c81;
 
-    // Objects balances
-    mapping(address => mapping(uint256 => uint256)) internal balances;
+    // Non-fungible bit. If an id has this bit set, it is a non-fungible (either collection or token)
+    uint256 internal constant _NF_BIT = 1 << 255;
 
-    // Operator Functions
-    mapping(address => mapping(address => bool)) internal operators;
+    // Mask for non-fungible collection (including the nf bit)
+    uint256 internal constant _NF_COLLECTION_MASK = uint256(type(uint32).max) << 224;
+    uint256 internal constant _NF_TOKEN_MASK = ~_NF_COLLECTION_MASK;
 
-    // Events
-    event TransferSingle(address indexed _operator, address indexed _from, address indexed _to, uint256 _id, uint256 _amount);
-    event TransferBatch(address indexed _operator, address indexed _from, address indexed _to, uint256[] _ids, uint256[] _amounts);
-    event ApprovalForAll(address indexed _owner, address indexed _operator, bool _approved);
-    event URI(string _uri, uint256 indexed _id);
-
-    /***********************************|
-    |     Public Transfer Functions     |
-    |__________________________________*/
+    mapping(address => mapping(address => bool)) internal _operators;
+    mapping(uint256 => mapping(address => uint256)) internal _balances;
+    mapping(uint256 => uint256) internal _supplies;
+    mapping(uint256 => address) internal _owners;
+    mapping(uint256 => bool) internal _created;
 
     /**
-     * @notice Transfers amount amount of an _id from the _from address to the _to address specified
-     * @param _from    Source address
-     * @param _to      Target address
-     * @param _id      ID of the token type
-     * @param _amount  Transfered amount
-     * @param _data    Additional data with no specified format, sent in call to `_to`
+     * @dev Constructor function
+     */
+    constructor() internal {
+        _registerInterface(type(IERC1155).interfaceId);
+        _registerInterface(type(IERC1155MetadataURI).interfaceId);
+        _registerInterface(type(IERC1155Inventory).interfaceId);
+    }
+
+
+    //================================== ERC1155 =======================================/
+
+    /**
+     * @dev See {IERC1155-safeTransferFrom}.
      */
     function safeTransferFrom(
-        address _from,
-        address _to,
-        uint256 _id,
-        uint256 _amount,
-        bytes memory _data
-    ) public {
-        require((msg.sender == _from) || isApprovedForAll(_from, msg.sender), "ERC1155#safeTransferFrom: INVALID_OPERATOR");
-        require(_to != address(0), "ERC1155#safeTransferFrom: INVALID_RECIPIENT");
-        // require(_amount >= balances[_from][_id]) is not necessary since checked with safemath operations
-
-        _safeTransferFrom(_from, _to, _id, _amount);
-        _callonERC1155Received(_from, _to, _id, _amount, _data);
+        address from,
+        address to,
+        uint256 id,
+        uint256 value,
+        bytes memory data
+    ) public virtual override {
+        _safeTransferFrom(from, to, id, value, data, false);
     }
 
     /**
-     * @notice Send multiple types of Tokens from the _from address to the _to address (with safety call)
-     * @param _from     Source addresses
-     * @param _to       Target addresses
-     * @param _ids      IDs of each token type
-     * @param _amounts  Transfer amounts per token type
-     * @param _data     Additional data with no specified format, sent in call to `_to`
+     * @dev See {IERC1155-safeBatchTransferFrom}.
      */
     function safeBatchTransferFrom(
-        address _from,
-        address _to,
-        uint256[] memory _ids,
-        uint256[] memory _amounts,
-        bytes memory _data
-    ) public {
-        // Requirements
-        require((msg.sender == _from) || isApprovedForAll(_from, msg.sender), "ERC1155#safeBatchTransferFrom: INVALID_OPERATOR");
-        require(_to != address(0), "ERC1155#safeBatchTransferFrom: INVALID_RECIPIENT");
-
-        _safeBatchTransferFrom(_from, _to, _ids, _amounts);
-        _callonERC1155BatchReceived(_from, _to, _ids, _amounts, _data);
+        address from,
+        address to,
+        uint256[] memory ids,
+        uint256[] memory values,
+        bytes memory data
+    ) public virtual override {
+        _safeBatchTransferFrom(from, to, ids, values, data);
     }
 
-    /***********************************|
-    |    Internal Transfer Functions    |
-    |__________________________________*/
+    function sameNFTCollectionSafeBatchTransferFrom(
+        address from,
+        address to,
+        uint256[] memory nftIds,
+        bytes memory data
+    ) public virtual {
+        _sameNFTCollectionSafeBatchTransferFrom(from, to, nftIds, data);
+    }
 
     /**
-     * @notice Transfers amount amount of an _id from the _from address to the _to address specified
-     * @param _from    Source address
-     * @param _to      Target address
-     * @param _id      ID of the token type
-     * @param _amount  Transfered amount
+     * @dev See {IERC1155-balanceOf}.
+     */
+    function balanceOf(address owner, uint256 id) public virtual override view returns (uint256) {
+        require(owner != address(0), "Inventory: zero address");
+
+        if (isNFT(id)) {
+            return _owners[id] == owner ? 1 : 0;
+        }
+
+        return _balances[id][owner];
+    }
+
+    /**
+     * @dev See {IERC1155-balanceOfBatch}.
+     */
+    function balanceOfBatch(address[] memory owners, uint256[] memory ids)
+        public
+        virtual
+        override
+        view
+        returns (uint256[] memory)
+    {
+        require(owners.length == ids.length, "Inventory: inconsistent arrays");
+
+        uint256[] memory balances = new uint256[](owners.length);
+
+        for (uint256 i = 0; i < owners.length; ++i) {
+            require(owners[i] != address(0), "Inventory: zero address");
+
+            uint256 id = ids[i];
+
+            if (isNFT(id)) {
+                balances[i] = _owners[id] == owners[i] ? 1 : 0;
+            } else {
+                balances[i] = _balances[id][owners[i]];
+            }
+        }
+
+        return balances;
+    }
+
+    /**
+     * @dev See {IERC1155-setApprovalForAll}.
+     */
+    function setApprovalForAll(address operator, bool approved) public virtual override {
+        address sender = _msgSender();
+        require(operator != sender, "Inventory: approval to sender");
+        _operators[sender][operator] = approved;
+        emit ApprovalForAll(sender, operator, approved);
+    }
+
+    /**
+     * @dev See {IERC1155-isApprovedForAll}.
+     */
+    function isApprovedForAll(address tokenOwner, address operator) public virtual override view returns (bool) {
+        return _operators[tokenOwner][operator];
+    }
+
+
+    //================================== ERC1155MetadataURI =======================================/
+
+    /**
+     * @dev See {IERC1155MetadataURI-uri}.
+     */
+    function uri(uint256 id) external virtual override view returns (string memory) {
+        return _uri(id);
+    }
+
+
+    //================================== ERC1155Inventory  =======================================/
+
+    /**
+     * @dev See {IERC1155AssetCollections-isFungible}.
+     */
+    function isFungible(uint256 id) public virtual override pure returns (bool) {
+        return id & _NF_BIT == 0;
+    }
+
+    /**
+     * @dev See {IERC1155AssetCollections-collectionOf}.
+     */
+    function collectionOf(uint256 nftId) public virtual override pure returns (uint256) {
+        require(isNFT(nftId), "Inventory: not an NFT");
+        return nftId & _NF_COLLECTION_MASK;
+    }
+
+    /**
+     * @dev See {IERC1155AssetCollections-ownerOf}.
+     */
+    function ownerOf(uint256 nftId) public virtual override view returns (address) {
+        address owner = _owners[nftId];
+        require(owner != address(0), "Inventory: non-existing NFT");
+        return owner;
+    }
+
+    /**
+     * @dev See {IERC1155AssetCollections-totalSupply}.
+     */
+    function totalSupply(uint256 id) public virtual override view returns (uint256) {
+        if (isNFT(id)) {
+            return _owners[id] == address(0) ? 0 : 1;
+        } else {
+            return _supplies[id];
+        }
+    }
+
+    //================================== ERC1155Inventory Non-standard helpers =======================================/
+
+    /**
+     * @dev Introspects whether an identifier represents an non-fungible token.
+     * @param id Identifier to query.
+     * @return True if `id` represents an non-fungible token.
+     */
+    function isNFT(uint256 id) public virtual pure returns (bool) {
+        return (id & _NF_BIT) != 0 && (id & _NF_TOKEN_MASK != 0);
+    }
+
+    /**
+     * @dev Introspects whether an identifier represents an non-fungible collection.
+     * @param id Identifier to query.
+     * @return True if `id` represents an non-fungible collection.
+     */
+    function isNFTCollection(uint256 id) public virtual pure returns (bool) {
+        return (id & _NF_BIT) != 0 && (id & _NF_TOKEN_MASK == 0);
+    }
+
+    //================================== Metadata Internal =======================================/
+
+    /**
+     * @dev (abstract) Returns an URI for a given identifier.
+     * @param id Identifier to query the URI of.
+     * @return The metadata URI for `id`.
+     */
+    function _uri(uint256 id) internal virtual view returns (string memory);
+
+    //================================== Inventory Collections Internal =======================================/
+
+    /**
+     * Creates a collection.
+     * @dev Reverts if `collectionId` does not represent a collection.
+     * @dev Reverts if `collectionId` has already been created.
+     * @dev Emits a {IERC1155-URI} event.
+     * @dev Emits a {IERC1155Inventory-CollectionCreated} event.
+     * @param collectionId Identifier of the collection.
+     */
+    function _createCollection(uint256 collectionId) internal virtual {
+        require(!isNFT(collectionId), "Inventory: not a collection");
+        require(!_created[collectionId], "Inventory: existing collection");
+        _created[collectionId] = true;
+        emit URI(_uri(collectionId), collectionId);
+        emit CollectionCreated(collectionId, isFungible(collectionId));
+    }
+
+    //================================== Transfer Internal =======================================/
+
+    /**
+     * Transfers tokens to another address.
+     * @dev Reverts if `batch` is false and `to` is the zero address.
+     * @dev Reverts if `batch` is false the sender is not approved.
+     * @dev Reverts if `id` represents a non-fungible collection.
+     * @dev Reverts if `id` represents a non-fungible token and `value` is not 1.
+     * @dev Reverts if `id` represents a non-fungible token and is not owned by `from`.
+     * @dev Reverts if `id` represents a fungible collection and `value` is 0.
+     * @dev Reverts if `id` represents a fungible collection and `from` doesn't have enough balance.
+     * @dev Emits an {IERC1155-TransferSingle} event.
+     * @param from Current token owner.
+     * @param to Address of the new token owner.
+     * @param id Identifier of the token to transfer.
+     * @param value Amount of token to transfer.
+     * @param data Optional data to pass to the receiver contract.
+     * @param isBatch Whether this function is called by `_safeBatchTransferFrom`.
      */
     function _safeTransferFrom(
-        address _from,
-        address _to,
-        uint256 _id,
-        uint256 _amount
-    ) internal {
-        // Update balances
-        balances[_from][_id] = balances[_from][_id].sub(_amount); // Subtract amount
-        balances[_to][_id] = balances[_to][_id].add(_amount); // Add amount
+        address from,
+        address to,
+        uint256 id,
+        uint256 value,
+        bytes memory data,
+        bool isBatch
+    ) internal virtual {
+        address sender;
+        if (!isBatch) {
+            require(to != address(0), "Inventory: zero address");
+            sender = _msgSender();
+            bool operatable = (from == sender) || _operators[from][sender];
+            require(operatable, "Inventory: non-approved sender");
+        }
 
-        // Emit event
-        emit TransferSingle(msg.sender, _from, _to, _id, _amount);
-    }
+        uint256 collectionId;
+        if (isFungible(id)) {
+            require(value != 0, "Inventory: zero value");
+            collectionId = id;
+            _balances[collectionId][from] = _balances[collectionId][from].sub(value);
+        } else if (id & _NF_TOKEN_MASK != 0) {
+            require(value == 1, "Inventory: wrong NFT value");
+            require(from == _owners[id], "Inventory: non-owned NFT");
+            _owners[id] = to;
+            collectionId = id & _NF_COLLECTION_MASK;
+            // cannot underflow as balance is verified through ownership
+            _balances[collectionId][from] -= value;
+        } else {
+            revert("Inventory: wrong identifier");
+        }
 
-    /**
-     * @notice Verifies if receiver is contract and if so, calls (_to).onERC1155Received(...)
-     */
-    function _callonERC1155Received(
-        address _from,
-        address _to,
-        uint256 _id,
-        uint256 _amount,
-        bytes memory _data
-    ) internal {
-        // Check if recipient is contract
-        if (_to.isContract()) {
-            bytes4 retval = IERC1155TokenReceiver(_to).onERC1155Received(msg.sender, _from, _id, _amount, _data);
-            require(retval == ERC1155_RECEIVED_VALUE, "ERC1155#_callonERC1155Received: INVALID_ON_RECEIVE_MESSAGE");
+        // cannot overflow as supply cannot overflow
+        _balances[collectionId][to] += value;
+
+        if (!isBatch) {
+            _callOnERC1155Received(from, to, id, value, data);
+            emit TransferSingle(sender, from, to, id, value);
         }
     }
 
     /**
-     * @notice Send multiple types of Tokens from the _from address to the _to address (with safety call)
-     * @param _from     Source addresses
-     * @param _to       Target addresses
-     * @param _ids      IDs of each token type
-     * @param _amounts  Transfer amounts per token type
+     * Transfers multiple tokens to another address
+     * @dev Reverts if `ids` and `values` have inconsistent lengths.
+     * @dev Reverts if `to` is the zero address.
+     * @dev Reverts if the sender is not approved.
+     * @dev Reverts if one of `ids` represents a non-fungible collection.
+     * @dev Reverts if one of `ids` represents a non-fungible token and `value` is not 1.
+     * @dev Reverts if one of `ids` represents a non-fungible token and is not owned by `from`.
+     * @dev Reverts if one of `ids` represents a fungible collection and `value` is 0.
+     * @dev Reverts if one of `ids` represents a fungible collection and `from` doesn't have enough balance.
+     * @dev Emits an {IERC1155-TransferBatch} event.
+     * @param from Current token owner.
+     * @param to Address of the new token owner.
+     * @param ids Identifiers of the tokens to transfer.
+     * @param values Amounts of tokens to transfer.
+     * @param data Optional data to pass to the receiver contract.
      */
     function _safeBatchTransferFrom(
-        address _from,
-        address _to,
-        uint256[] memory _ids,
-        uint256[] memory _amounts
-    ) internal {
-        require(_ids.length == _amounts.length, "ERC1155#_safeBatchTransferFrom: INVALID_ARRAYS_LENGTH");
+        address from,
+        address to,
+        uint256[] memory ids,
+        uint256[] memory values,
+        bytes memory data
+    ) internal virtual {
+        require(to != address(0), "Inventory: zero address");
+        uint256 length = ids.length;
+        require(length == values.length, "Inventory: inconsistent arrays");
+        address sender = _msgSender();
+        bool operatable = (from == sender) || _operators[from][sender];
+        require(operatable, "Inventory: non-approved sender");
 
-        // Number of transfer to execute
-        uint256 nTransfer = _ids.length;
-
-        // Executing all transfers
-        for (uint256 i = 0; i < nTransfer; i++) {
-            // Update storage balance of previous bin
-            balances[_from][_ids[i]] = balances[_from][_ids[i]].sub(_amounts[i]);
-            balances[_to][_ids[i]] = balances[_to][_ids[i]].add(_amounts[i]);
+        bool isBatch = true;
+        for (uint256 i = 0; i < length; i++) {
+            _safeTransferFrom(from, to, ids[i], values[i], data, isBatch);
         }
 
-        // Emit event
-        emit TransferBatch(msg.sender, _from, _to, _ids, _amounts);
+        emit TransferBatch(sender, from, to, ids, values);
+        _callOnERC1155BatchReceived(from, to, ids, values, data);
     }
 
     /**
-     * @notice Verifies if receiver is contract and if so, calls (_to).onERC1155BatchReceived(...)
+     * @dev Transfers multiple non-fungible tokens belonging to the same collection.
+     * @dev Reverts if `to` is the zero address.
+     * @dev Reverts if one of `nftIds` does not represent a non-fungible token.
+     * @dev Reverts if one of `nftIds` represents a non-fungible token which is not owned by `from`.
+     * @dev Reverts if two of `nftIds` have a different collection.
+     * @dev Emits an {IERC1155-TransferBatch} event.
+     * @param to Address of the new tokens owner.
+     * @param nftIds Identifiers of the non-fungible tokens to mint.
+     * @param data Optional data to send along to a receiver contract.
      */
-    function _callonERC1155BatchReceived(
-        address _from,
-        address _to,
-        uint256[] memory _ids,
-        uint256[] memory _amounts,
-        bytes memory _data
-    ) internal {
-        // Pass data if recipient is contract
-        if (_to.isContract()) {
-            bytes4 retval = IERC1155TokenReceiver(_to).onERC1155BatchReceived(msg.sender, _from, _ids, _amounts, _data);
-            require(retval == ERC1155_BATCH_RECEIVED_VALUE, "ERC1155#_callonERC1155BatchReceived: INVALID_ON_RECEIVE_MESSAGE");
-        }
-    }
+    function _sameNFTCollectionSafeBatchTransferFrom(
+        address from,
+        address to,
+        uint256[] memory nftIds,
+        bytes memory data
+    ) internal virtual {
+        require(to != address(0), "Inventory: zero address");
 
-    /***********************************|
-  |         Operator Functions        |
-  |__________________________________*/
+        uint256 length = nftIds.length;
+        uint256[] memory values = new uint256[](length);
 
-    /**
-     * @notice Enable or disable approval for a third party ("operator") to manage all of caller's tokens
-     * @param _operator  Address to add to the set of authorized operators
-     * @param _approved  True if the operator is approved, false to revoke approval
-     */
-    function setApprovalForAll(address _operator, bool _approved) external {
-        // Update operator status
-        operators[msg.sender][_operator] = _approved;
-        emit ApprovalForAll(msg.sender, _operator, _approved);
-    }
+        address sender = _msgSender();
+        bool operatable = (from == sender) || _operators[from][sender];
+        require(operatable, "Inventory: non-approved sender");
 
-    /**
-     * @notice Queries the approval status of an operator for a given owner
-     * @param _owner      The owner of the Tokens
-     * @param _operator   Address of authorized operator
-     * @return isOperator True if the operator is approved, false if not
-     */
-    function isApprovedForAll(address _owner, address _operator) public view virtual returns (bool isOperator) {
-        return operators[_owner][_operator];
-    }
-
-    /***********************************|
-  |         Balance Functions         |
-  |__________________________________*/
-
-    /**
-     * @notice Get the balance of an account's Tokens
-     * @param _owner  The address of the token holder
-     * @param _id     ID of the Token
-     * @return The _owner's balance of the Token type requested
-     */
-    function balanceOf(address _owner, uint256 _id) public view returns (uint256) {
-        return balances[_owner][_id];
-    }
-
-    /**
-     * @notice Get the balance of multiple account/token pairs
-     * @param _owners The addresses of the token holders
-     * @param _ids    ID of the Tokens
-     * @return        The _owner's balance of the Token types requested (i.e. balance for each (owner, id) pair)
-     */
-    function balanceOfBatch(address[] memory _owners, uint256[] memory _ids) public view returns (uint256[] memory) {
-        require(_owners.length == _ids.length, "ERC1155#balanceOfBatch: INVALID_ARRAY_LENGTH");
-
-        // Variables
-        uint256[] memory batchBalances = new uint256[](_owners.length);
-
-        // Iterate over each owner and token ID
-        for (uint256 i = 0; i < _owners.length; i++) {
-            batchBalances[i] = balances[_owners[i]][_ids[i]];
+        uint256 collectionId;
+        for (uint256 i = 0; i < length; i++) {
+            uint256 nftId = nftIds[i];
+            require(isNFT(nftId), "Inventory: not an NFT");
+            require(_owners[nftId] == from, "Inventory: NFT not owned");
+            _owners[nftId] = to;
+            values[i] = 1;
+            if (i == 0) {
+                collectionId = nftId & _NF_COLLECTION_MASK;
+            } else {
+                require(collectionId == nftId & _NF_COLLECTION_MASK, "Inventory: inconsistent collections");
+            }
         }
 
-        return batchBalances;
+        // cannot underflow as balance is verified through ownership
+        _balances[collectionId][from] -= length;
+        // cannot overflow as supply cannot overflow
+        _balances[collectionId][to] += length;
+
+        emit TransferBatch(sender, from, to, nftIds, values);
+        _callOnERC1155BatchReceived(sender, to, nftIds, values, data);
     }
 
-    /***********************************|
-    |          ERC165 Functions         |
-    |__________________________________*/
 
-    /*
-     * INTERFACE_SIGNATURE_ERC165 = bytes4(keccak256("supportsInterface(bytes4)"));
-     */
-    bytes4 private constant INTERFACE_SIGNATURE_ERC165 = 0x01ffc9a7;
-
-    /*
-     * INTERFACE_SIGNATURE_ERC1155 =
-     * bytes4(keccak256("safeTransferFrom(address,address,uint256,uint256,bytes)")) ^
-     * bytes4(keccak256("safeBatchTransferFrom(address,address,uint256[],uint256[],bytes)")) ^
-     * bytes4(keccak256("balanceOf(address,uint256)")) ^
-     * bytes4(keccak256("balanceOfBatch(address[],uint256[])")) ^
-     * bytes4(keccak256("setApprovalForAll(address,bool)")) ^
-     * bytes4(keccak256("isApprovedForAll(address,address)"));
-     */
-    bytes4 private constant INTERFACE_SIGNATURE_ERC1155 = 0xd9b67a26;
+    //================================== Minting Internal =======================================/
 
     /**
-     * @notice Query if a contract implements an interface
-     * @param _interfaceID  The interface identifier, as specified in ERC-165
-     * @return `true` if the contract implements `_interfaceID` and
-     */
-    function supportsInterface(bytes4 _interfaceID) external view override returns (bool) {
-        if (_interfaceID == INTERFACE_SIGNATURE_ERC165 || _interfaceID == INTERFACE_SIGNATURE_ERC1155) {
-            return true;
-        }
-        return false;
-    }
-}
-
-/**
- * @notice Contract that handles metadata related methods.
- * @dev Methods assume a deterministic generation of URI based on token IDs.
- *      Methods also assume that URI uses hex representation of token IDs.
- */
-contract ERC1155Metadata {
-    // URI's default URI prefix
-    string internal baseMetadataURI;
-    event URI(string _uri, uint256 indexed _id);
-
-    /***********************************|
-    |     Metadata Public Function s    |
-    |__________________________________*/
-
-    /**
-     * @notice A distinct Uniform Resource Identifier (URI) for a given token.
-     * @dev URIs are defined in RFC 3986.
-     *      URIs are assumed to be deterministically generated based on token ID
-     *      Token IDs are assumed to be represented in their hex format in URIs
-     * @return URI string
-     */
-    function uri(uint256 _id) public view virtual returns (string memory) {
-        return string(abi.encodePacked(baseMetadataURI, _uint2str(_id), ".json"));
-    }
-
-    /***********************************|
-    |    Metadata Internal Functions    |
-    |__________________________________*/
-
-    /**
-     * @notice Will emit default URI log event for corresponding token _id
-     * @param _tokenIDs Array of IDs of tokens to log default URI
-     */
-    function _logURIs(uint256[] memory _tokenIDs) internal {
-        string memory baseURL = baseMetadataURI;
-        string memory tokenURI;
-
-        for (uint256 i = 0; i < _tokenIDs.length; i++) {
-            tokenURI = string(abi.encodePacked(baseURL, _uint2str(_tokenIDs[i]), ".json"));
-            emit URI(tokenURI, _tokenIDs[i]);
-        }
-    }
-
-    /**
-     * @notice Will emit a specific URI log event for corresponding token
-     * @param _tokenIDs IDs of the token corresponding to the _uris logged
-     * @param _URIs    The URIs of the specified _tokenIDs
-     */
-    function _logURIs(uint256[] memory _tokenIDs, string[] memory _URIs) internal {
-        require(_tokenIDs.length == _URIs.length, "ERC1155Metadata#_logURIs: INVALID_ARRAYS_LENGTH");
-        for (uint256 i = 0; i < _tokenIDs.length; i++) {
-            emit URI(_URIs[i], _tokenIDs[i]);
-        }
-    }
-
-    /**
-     * @notice Will update the base URL of token's URI
-     * @param _newBaseMetadataURI New base URL of token's URI
-     */
-    function _setBaseMetadataURI(string memory _newBaseMetadataURI) internal {
-        baseMetadataURI = _newBaseMetadataURI;
-    }
-
-    /***********************************|
-  |    Utility Internal Functions     |
-  |__________________________________*/
-
-    /**
-     * @notice Convert uint256 to string
-     * @param _i Unsigned integer to convert to string
-     */
-    function _uint2str(uint256 _i) internal pure returns (string memory _uintAsString) {
-        if (_i == 0) {
-            return "0";
-        }
-
-        uint256 j = _i;
-        uint256 ii = _i;
-        uint256 len;
-
-        // Get number of bytes
-        while (j != 0) {
-            len++;
-            j /= 10;
-        }
-
-        bytes memory bstr = new bytes(len);
-        uint256 k = len - 1;
-
-        // Get each individual ASCII
-        while (ii != 0) {
-            bstr[k--] = bytes1(uint8(48 + (ii % 10)));
-            ii /= 10;
-        }
-
-        // Convert to string
-        return string(bstr);
-    }
-}
-
-/**
- * @dev Multi-Fungible Tokens with minting and burning methods. These methods assume
- *      a parent contract to be executed as they are `internal` functions
- */
-contract ERC1155MintBurn is ERC1155 {
-    /****************************************|
-    |            Minting Functions           |
-    |_______________________________________*/
-
-    /**
-     * @notice Mint _amount of tokens of a given id
-     * @param _to      The address to mint tokens to
-     * @param _id      Token id to mint
-     * @param _amount  The amount to be minted
-     * @param _data    Data to pass if receiver is contract
+     * Mints some token.
+     * @dev Reverts if `batch` is false and `to` is the zero address.
+     * @dev Reverts if `id` represents a non-fungible collection.
+     * @dev Reverts if `id` represents a non-fungible token and `value` is not 1.
+     * @dev Reverts if `id` represents a non-fungible token which is owned by a non-zero address.
+     * @dev Reverts if `id` represents a fungible collection and `value` is 0.
+     * @dev Reverts if `id` represents a fungible collection and there is an overflow of supply.
+     * @dev Reverts if `batch` is false, `safe` is true and the call to the receiver contract fails or is refused.
+     * @dev Emits an {IERC1155-TransferSingle} event if `batch` is false.
+     * @param to Address of the new token owner.
+     * @param id Identifier of the token to mint.
+     * @param value Amount of token to mint.
+     * @param data Optional data to send along to a receiver contract.
+     * @param safe Whether to call the receiver contract.
+     * @param isBatch Whether this function is called by `_batchMint`.
      */
     function _mint(
-        address _to,
-        uint256 _id,
-        uint256 _amount,
-        bytes memory _data
-    ) internal {
-        // Add _amount
-        balances[_to][_id] = balances[_to][_id].add(_amount);
+        address to,
+        uint256 id,
+        uint256 value,
+        bytes memory data,
+        bool safe,
+        bool isBatch
+    ) internal virtual {
+        if (!isBatch) {
+            require(to != address(0), "Inventory: zero address");
+        }
 
-        // Emit event
-        emit TransferSingle(msg.sender, address(0x0), _to, _id, _amount);
+        uint256 collectionId;
+        if (isFungible(id)) {
+            require(value != 0, "Inventory: zero value");
+            collectionId = id;
+            _supplies[collectionId] = _supplies[collectionId].add(value);
+        } else if (id & _NF_TOKEN_MASK != 0) {
+            require(value == 1, "Inventory: wrong NFT value");
+            require(_owners[id] == address(0), "Inventory: NFT already exists");
 
-        // Calling onReceive method if recipient is contract
-        _callonERC1155Received(address(0x0), _to, _id, _amount, _data);
+            _owners[id] = to;
+
+            collectionId = id & _NF_COLLECTION_MASK;
+            // it is virtually impossible that a non-fungible collection balance or supply
+            // overflows due to the cost of minting unique tokens
+            _supplies[collectionId] += value;
+        } else {
+            revert("Inventory: wrong identifier");
+        }
+
+        // cannot overflow as supply cannot overflow
+        _balances[collectionId][to] += value;
+
+        if (!isBatch) {
+            emit TransferSingle(_msgSender(), address(0), to, id, value);
+            if (safe) {
+                _callOnERC1155Received(address(0), to, id, value, data);
+            }
+        }
     }
 
     /**
-     * @notice Mint tokens for each ids in _ids
-     * @param _to       The address to mint tokens to
-     * @param _ids      Array of ids to mint
-     * @param _amounts  Array of amount of tokens to mint per id
-     * @param _data    Data to pass if receiver is contract
+     * @dev Mints a isBatch of tokens.
+     * @dev Reverts if `ids` and `values` have different lengths.
+     * @dev Reverts if `to` is the zero address.
+     * @dev Reverts if one of `ids` represents a non-fungible collection.
+     * @dev Reverts if one of `ids` represents a non-fungible token and its paired value is not 1.
+     * @dev Reverts if one of `ids` represents a non-fungible token which is owned by a non-zero address.
+     * @dev Reverts if one of `ids` represents a fungible collection and its paired value is 0.
+     * @dev Reverts if one of `ids` represents a fungible collection and there is an overflow of supply.
+     * @dev Reverts if `safe` is true and the call to the receiver contract fails or is refused.
+     * @dev Emits an {IERC1155-TransferBatch} event.
+     * @param to Address of the new tokens owner.
+     * @param ids Identifiers of the tokens to mint.
+     * @param values Amounts of tokens to mint.
+     * @param data Optional data to send along to a receiver contract.
+     * @param safe Whether to call the receiver contract.
      */
     function _batchMint(
-        address _to,
-        uint256[] memory _ids,
-        uint256[] memory _amounts,
-        bytes memory _data
+        address to,
+        uint256[] memory ids,
+        uint256[] memory values,
+        bytes memory data,
+        bool safe
+    ) internal virtual {
+        uint256 length = ids.length;
+        require(length == values.length, "Inventory: inconsistent arrays");
+
+        require(to != address(0), "Inventory: zero address");
+
+        bool isBatch = true;
+        for (uint256 i = 0; i < length; i++) {
+            _mint(to, ids[i], values[i], data, safe, isBatch);
+        }
+
+        emit TransferBatch(_msgSender(), address(0), to, ids, values);
+
+        if (safe) {
+            _callOnERC1155BatchReceived(address(0), to, ids, values, data);
+        }
+    }
+
+    /**
+     * @dev Mints a isBatch of non-fungible tokens belonging to the same collection.
+     * @dev Reverts if `to` is the zero address.
+     * @dev Reverts if one of `nftIds` does not represent a non-fungible token.
+     * @dev Reverts if one of `nftIds` represents a non-fungible token which is owned by a non-zero address.
+     * @dev Reverts if two of `nftIds` have a different collection.
+     * @dev Reverts if `safe` is true and the call to the receiver contract fails or is refused.
+     * @dev Emits an {IERC1155-TransferBatch} event.
+     * @param to Address of the new tokens owner.
+     * @param nftIds Identifiers of the tokens to mint.
+     * @param data Optional data to send along to a receiver contract.
+     * @param safe Whether to call the receiver contract.
+     */
+    function _sameNFTCollectionBatchMint(
+        address to,
+        uint256[] memory nftIds,
+        bytes memory data,
+        bool safe
+    ) internal virtual {
+        require(to != address(0), "Inventory: zero address");
+        uint256 length = nftIds.length;
+        uint256[] memory values = new uint256[](length);
+
+        uint256 collectionId;
+        for (uint256 i = 0; i < length; i++) {
+            uint256 nftId = nftIds[i];
+            require(isNFT(nftId), "Inventory: not an NFT");
+            require(_owners[nftId] == address(0), "Inventory: NFT already exists");
+            _owners[nftId] = to;
+            values[i] = 1;
+            if (i == 0) {
+                collectionId = nftId & _NF_COLLECTION_MASK;
+            } else {
+                require(collectionId == nftId & _NF_COLLECTION_MASK, "Inventory: inconsistent collections");
+            }
+        }
+
+        // it is virtually impossible that a non-fungible collection balance or supply
+        // overflows due to the cost of minting unique tokens
+        _balances[collectionId][to] += length;
+        _supplies[collectionId] += length;
+
+        emit TransferBatch(_msgSender(), address(0), to, nftIds, values);
+
+        if (safe) {
+            _callOnERC1155BatchReceived(address(0), to, nftIds, values, data);
+        }
+    }
+
+    //================================== Burning Internals =======================================/
+
+    /**
+     * Burns some token.
+     * @dev Reverts if `batch` is false and the sender is not approved.
+     * @dev Reverts if `id` represents a non-fungible collection.
+     * @dev Reverts if `id` represents a fungible collection and `value` is 0.
+     * @dev Reverts if `id` represents a fungible collection and `value` is higher than `from`'s balance.
+     * @dev Reverts if `id` represents a non-fungible token and `value` is not 1.
+     * @dev Reverts if `id` represents a non-fungible token which is not owned by `from`.
+     * @dev Emits an {IERC1155-TransferSingle} event if `batch` is false.
+     * @param from Address of the current token owner.
+     * @param id Identifier of the token to burn.
+     * @param value Amount of token to burn.
+     * @param isBatch Whether this function is called by `_batchBurnFrom`.
+     */
+    function _burnFrom(
+        address from,
+        uint256 id,
+        uint256 value,
+        bool isBatch
+    ) internal virtual {
+        address to = address(0);
+
+        address sender;
+        if (!isBatch) {
+            sender = _msgSender();
+            bool operatable = (from == sender) || _operators[from][sender];
+            require(operatable, "Inventory: non-approved sender");
+        }
+
+        uint256 collectionId;
+        if (isFungible(id)) {
+            require(value != 0, "Inventory: zero value");
+            collectionId = id;
+            _balances[collectionId][from] = _balances[collectionId][from].sub(value);
+        } else if (id & _NF_TOKEN_MASK != 0) {
+            require(value == 1, "Inventory: wrong NFT value");
+            require(from == _owners[id], "Inventory: non-owned NFT");
+            _owners[id] = to;
+            collectionId = id & _NF_COLLECTION_MASK;
+            // cannot underflow as balance is confirmed through ownership
+            _balances[collectionId][from] -= value;
+        } else {
+            revert("Inventory: wrong identifier");
+        }
+
+        // Cannot underflow
+        _supplies[collectionId] -= value;
+
+        if (!isBatch) {
+            emit TransferSingle(sender, from, to, id, value);
+        }
+    }
+
+    /**
+     * Burns multiple tokens.
+     * @dev Reverts if `ids` and `values` have different lengths.
+     * @dev Reverts if the sender is not approved.
+     * @dev Reverts if one of `ids` represents a non-fungible collection.
+     * @dev Reverts if one of `ids` represents a fungible collection and `value` is 0.
+     * @dev Reverts if one of `ids` represents a fungible collection and `value` is higher than `from`'s balance.
+     * @dev Reverts if one of `ids` represents a non-fungible token and `value` is not 1.
+     * @dev Reverts if one of `ids` represents a non-fungible token which is not owned by `from`.
+     * @dev Emits an {IERC1155-TransferBatch} event.
+     * @param from Address of the current tokens owner.
+     * @param ids Identifiers of the tokens to burn.
+     * @param values Amounts of tokens to burn.
+     */
+    function _batchBurnFrom(
+        address from,
+        uint256[] memory ids,
+        uint256[] memory values
+    ) internal virtual {
+        uint256 length = ids.length;
+        require(length == values.length, "Inventory: inconsistent arrays");
+
+        address sender = _msgSender();
+        bool operatable = (from == sender) || _operators[from][sender];
+        require(operatable, "Inventory: non-approved sender");
+
+        bool isBatch = true;
+        for (uint256 i = 0; i < length; ++i) {
+            _burnFrom(from, ids[i], values[i], isBatch);
+        }
+
+        address to = address(0);
+        emit TransferBatch(sender, from, to, ids, values);
+    }
+
+    /**
+     * Burns multiple non-fungible tokens belonging to the same collection.
+     * @dev Reverts if the sender is not approved.
+     * @dev Reverts if one of `nftIds` does not represent a non-fungible token.
+     * @dev Reverts if one of `nftIds` is not owned by `from`.
+     * @dev Reverts if there are different collections for `nftIds`.
+     * @dev Emits an {IERC1155-TransferBatch} event.
+     * @param from address address that will own the minted tokens
+     * @param nftIds uint256[] identifiers of the tokens to be minted
+     */
+    function _sameNFTCollectionBatchBurnFrom(address from, uint256[] memory nftIds) internal virtual {
+        address sender = _msgSender();
+        bool operatable = (from == sender) || _operators[from][sender];
+        require(operatable, "Inventory: non-approved sender");
+
+        uint256 length = nftIds.length;
+        uint256[] memory values = new uint256[](length);
+
+        address to = address(0);
+        uint256 collectionId;
+        for (uint256 i = 0; i < length; i++) {
+            uint256 nftId = nftIds[i];
+            require(isNFT(nftId), "Inventory: not an NFT");
+            require(_owners[nftId] == from, "Inventory: NFT not owned");
+            _owners[nftId] = to;
+            values[i] = 1;
+            if (i == 0) {
+                collectionId = nftId & _NF_COLLECTION_MASK;
+            } else {
+                require(collectionId == nftId & _NF_COLLECTION_MASK, "Inventory: inconsistent collections");
+            }
+        }
+
+        // cannot underflow as balance is confirmed through ownership
+        _balances[collectionId][from] -= length;
+        // cannot underflow
+        _supplies[collectionId] -= length;
+
+        emit TransferBatch(sender, from, to, nftIds, values);
+    }
+
+    //================================== Token Receiver Calls Internal =======================================/
+
+    /**
+     * Calls {IERC1155TokenReceiver-onERC1155Received} on a target address.
+     *  The call is not executed if the target address is not a contract.
+     * @dev Reverts if the call to the target fails or is refused.
+     * @param from Previous token owner.
+     * @param to New token owner.
+     * @param id Identifier of the token transferred.
+     * @param value Amount of token transferred.
+     * @param data Optional data to send along with the receiver contract call.
+     */
+    function _callOnERC1155Received(
+        address from,
+        address to,
+        uint256 id,
+        uint256 value,
+        bytes memory data
     ) internal {
-        require(_ids.length == _amounts.length, "ERC1155MintBurn#batchMint: INVALID_ARRAYS_LENGTH");
-
-        // Number of mints to execute
-        uint256 nMint = _ids.length;
-
-        // Executing all minting
-        for (uint256 i = 0; i < nMint; i++) {
-            // Update storage balance
-            balances[_to][_ids[i]] = balances[_to][_ids[i]].add(_amounts[i]);
+        if (!to.isContract()) {
+            return;
         }
 
-        // Emit batch mint event
-        emit TransferBatch(msg.sender, address(0x0), _to, _ids, _amounts);
+        bytes4 retval = IERC1155TokenReceiver(to).onERC1155Received(_msgSender(), from, id, value, data);
 
-        // Calling onReceive method if recipient is contract
-        _callonERC1155BatchReceived(address(0x0), _to, _ids, _amounts, _data);
+        require(retval == _ERC1155_RECEIVED, "Inventory: transfer refused");
     }
 
-    /****************************************|
-    |            Burning Functions           |
-    |_______________________________________*/
-
     /**
-     * @notice Burn _amount of tokens of a given token id
-     * @param _from    The address to burn tokens from
-     * @param _id      Token id to burn
-     * @param _amount  The amount to be burned
+     * Calls {IERC1155TokenReceiver-onERC1155BatchReceived} on a target address.
+     *  The call is not executed if the target address is not a contract.
+     * @dev Reverts if the call to the target fails or is refused.
+     * @param from Previous tokens owner.
+     * @param to New tokens owner.
+     * @param ids Identifiers of the tokens to transfer.
+     * @param values Amounts of tokens to transfer.
+     * @param data Optional data to send along with the receiver contract call.
      */
-    function _burn(
-        address _from,
-        uint256 _id,
-        uint256 _amount
+    function _callOnERC1155BatchReceived(
+        address from,
+        address to,
+        uint256[] memory ids,
+        uint256[] memory values,
+        bytes memory data
     ) internal {
-        //Substract _amount
-        balances[_from][_id] = balances[_from][_id].sub(_amount);
-
-        // Emit event
-        emit TransferSingle(msg.sender, _from, address(0x0), _id, _amount);
-    }
-
-    /**
-     * @notice Burn tokens of given token id for each (_ids[i], _amounts[i]) pair
-     * @param _from     The address to burn tokens from
-     * @param _ids      Array of token ids to burn
-     * @param _amounts  Array of the amount to be burned
-     */
-    function _batchBurn(
-        address _from,
-        uint256[] memory _ids,
-        uint256[] memory _amounts
-    ) internal {
-        require(_ids.length == _amounts.length, "ERC1155MintBurn#batchBurn: INVALID_ARRAYS_LENGTH");
-
-        // Number of mints to execute
-        uint256 nBurn = _ids.length;
-
-        // Executing all minting
-        for (uint256 i = 0; i < nBurn; i++) {
-            // Update storage balance
-            balances[_from][_ids[i]] = balances[_from][_ids[i]].sub(_amounts[i]);
+        if (!to.isContract()) {
+            return;
         }
 
-        // Emit batch mint event
-        emit TransferBatch(msg.sender, _from, address(0x0), _ids, _amounts);
-    }
-}
+        bytes4 retval = IERC1155TokenReceiver(to).onERC1155BatchReceived(_msgSender(), from, ids, values, data);
 
-library Strings {
-    // via https://github.com/oraclize/ethereum-api/blob/master/oraclizeAPI_0.5.sol
-    function strConcat(
-        string memory _a,
-        string memory _b,
-        string memory _c,
-        string memory _d,
-        string memory _e
-    ) internal pure returns (string memory) {
-        bytes memory _ba = bytes(_a);
-        bytes memory _bb = bytes(_b);
-        bytes memory _bc = bytes(_c);
-        bytes memory _bd = bytes(_d);
-        bytes memory _be = bytes(_e);
-        string memory abcde = new string(_ba.length + _bb.length + _bc.length + _bd.length + _be.length);
-        bytes memory babcde = bytes(abcde);
-        uint256 k = 0;
-        for (uint256 i = 0; i < _ba.length; i++) babcde[k++] = _ba[i];
-        for (uint256 i = 0; i < _bb.length; i++) babcde[k++] = _bb[i];
-        for (uint256 i = 0; i < _bc.length; i++) babcde[k++] = _bc[i];
-        for (uint256 i = 0; i < _bd.length; i++) babcde[k++] = _bd[i];
-        for (uint256 i = 0; i < _be.length; i++) babcde[k++] = _be[i];
-        return string(babcde);
-    }
-
-    function strConcat(
-        string memory _a,
-        string memory _b,
-        string memory _c,
-        string memory _d
-    ) internal pure returns (string memory) {
-        return strConcat(_a, _b, _c, _d, "");
-    }
-
-    function strConcat(
-        string memory _a,
-        string memory _b,
-        string memory _c
-    ) internal pure returns (string memory) {
-        return strConcat(_a, _b, _c, "", "");
-    }
-
-    function strConcat(string memory _a, string memory _b) internal pure returns (string memory) {
-        return strConcat(_a, _b, "", "", "");
-    }
-
-    function uint2str(uint256 _i) internal pure returns (string memory _uintAsString) {
-        if (_i == 0) {
-            return "0";
-        }
-        uint256 j = _i;
-        uint256 len;
-        while (j != 0) {
-            len++;
-            j /= 10;
-        }
-        bytes memory bstr = new bytes(len);
-        uint256 k = len - 1;
-        while (_i != 0) {
-            bstr[k--] = bytes1(uint8(48 + (_i % 10)));
-            _i /= 10;
-        }
-        return string(bstr);
-    }
-}
-
-contract OwnableDelegateProxy {}
-
-contract ProxyRegistry {
-    mapping(address => OwnableDelegateProxy) public proxies;
-}
-
-/**
- * @title ERC1155Tradable
- * ERC1155Tradable - ERC1155 contract that whitelists an operator address, 
- * has create and mint functionality, and supports useful standards from OpenZeppelin,
-  like _exists(), name(), symbol(), and totalSupply()
- */
-// contract ERC1155Tradable is ERC1155, ERC1155MintBurn, ERC1155Metadata, Ownable, MinterRole, WhitelistAdminRole {
-contract ERC1155Tradable is ERC1155, ERC1155MintBurn, ERC1155Metadata, Ownable, MinterRole {
-    using Strings for string;
-
-    address public proxyRegistryAddress;
-    uint256 private _currentTokenID = 0;
-    mapping(uint256 => address) public creators;
-    mapping(uint256 => uint256) public tokenSupply;
-    // mapping(uint256 => uint256) public tokenMaxSupply;
-    // Contract name
-    string public name;
-    // Contract symbol
-    string public symbol;
-
-    constructor(
-        string memory _name,
-        string memory _symbol,
-        address _proxyRegistryAddress
-    ) public {
-        name = _name;
-        symbol = _symbol;
-        proxyRegistryAddress = _proxyRegistryAddress;
-    }
-
-    function removeMinter(address account) public onlyOwner {
-        revokeRole(DEFAULT_ADMIN_ROLE, account);
-    }
-
-    function uri(uint256 _id) public view virtual override returns (string memory) {
-        require(_exists(_id), "ERC721Tradable#uri: NONEXISTENT_TOKEN");
-        return Strings.strConcat(baseMetadataURI, Strings.uint2str(_id));
-    }
-
-    // /**
-    //  * @dev Returns the total quantity for a token ID
-    //  * @param _id uint256 ID of the token to query
-    //  * @return amount of token in existence
-    //  */
-    // function totalSupply(uint256 _id) public view returns (uint256) {
-    //     return tokenSupply[_id];
-    // }
-
-    // /**
-    //  * @dev Returns the max quantity for a token ID
-    //  * @param _id uint256 ID of the token to query
-    //  * @return amount of token in existence
-    //  */
-    // function maxSupply(uint256 _id) public view returns (uint256) {
-    //     return tokenMaxSupply[_id];
-    // }
-
-    /**
-     * @dev Will update the base URL of token's URI
-     * @param _newBaseMetadataURI New base URL of token's URI
-     */
-    function setBaseMetadataURI(string memory _newBaseMetadataURI) public onlyOwner {
-        _setBaseMetadataURI(_newBaseMetadataURI);
-    }
-
-    /**
-     * @dev Creates a new token type and assigns _initialSupply to an address
-     * @param _id Token id to create
-     */
-    function create(uint256 _id)
-        external
-        // string calldata _uri
-        onlyOwner
-    {
-        // require(_initialSupply <= _maxSupply, "Initial supply cannot be more than max supply");
-        // uint256 _id = _getNextTokenID();
-        // _incrementTokenTypeId();
-        creators[_id] = msg.sender;
-
-        // if (bytes(_uri).length > 0) {
-        emit URI(uri(_id), _id);
-        // }
-
-        // if (_initialSupply != 0) _mint(msg.sender, _id, _initialSupply, _data);
-        // tokenSupply[_id] = _initialSupply;
-        // tokenMaxSupply[_id] = _maxSupply;
-        // return _id;
-    }
-
-    /**
-     * @dev Mints some amount of tokens to an address
-     * @param _to          Address of the future owner of the token
-     * @param _id          Token ID to mint
-     * @param _quantity    Amount of tokens to mint
-     * @param _data        Data to pass if receiver is contract
-     */
-    function mint(
-        address _to,
-        uint256 _id,
-        uint256 _quantity,
-        bytes memory _data
-    ) public onlyMinter {
-        // uint256 tokenId = _id;
-        // require(tokenSupply[tokenId] < tokenMaxSupply[tokenId], "Max supply reached");
-        _mint(_to, _id, _quantity, _data);
-        tokenSupply[_id] = tokenSupply[_id].add(_quantity);
-    }
-
-    /**
-     * Override isApprovedForAll to whitelist user's OpenSea proxy accounts to enable gas-free listings.
-     */
-    function isApprovedForAll(address _owner, address _operator) public view virtual override returns (bool isOperator) {
-        // Whitelist OpenSea proxy contract for easy trading.
-        ProxyRegistry proxyRegistry = ProxyRegistry(proxyRegistryAddress);
-        if (address(proxyRegistry.proxies(_owner)) == _operator) {
-            return true;
-        }
-
-        return ERC1155.isApprovedForAll(_owner, _operator);
-    }
-
-    /**
-     * @dev Returns whether the specified token exists by checking to see if it has a creator
-     * @param _id uint256 ID of the token to query the existence of
-     * @return bool whether the token exists
-     */
-    function _exists(uint256 _id) internal view returns (bool) {
-        return creators[_id] != address(0);
-    }
-
-    /**
-     * @dev calculates the next token ID based on value of _currentTokenID
-     * @return uint256 for the next token ID
-     */
-    function _getNextTokenID() private view returns (uint256) {
-        return _currentTokenID.add(1);
-    }
-
-    /**
-     * @dev increments the value of _currentTokenID
-     */
-    function _incrementTokenTypeId() private {
-        _currentTokenID++;
+        require(retval == _ERC1155_BATCH_RECEIVED, "Inventory: transfer refused");
     }
 }
 
@@ -1853,24 +2105,81 @@ contract ERC1155Tradable is ERC1155, ERC1155MintBurn, ERC1155Metadata, Ownable, 
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.8;
+pragma solidity ^0.6.8;
 
-contract GameeVouchers is ERC1155Tradable {
-    constructor(address proxyContractAddress) public ERC1155Tradable("GMEE Vouchers", "GMEE_vouch", proxyContractAddress) {}
 
-    /**
-     * @notice Mint tokens for each ids in _ids
-     * @param _to       The address to mint tokens to
-     * @param _ids      Array of ids to mint
-     * @param _amounts  Array of amount of tokens to mint per id
-     * @param _data    Data to pass if receiver is contract
-     */
+
+
+contract GameeVouchers is ERC1155Inventory, Ownable, MinterRole {
+    using UInt256ToDecimalString for uint256;
+
+    string public name = "GameeVouchers";
+    string public symbol = "GameeVouchers";
+
+    string internal _baseMetadataURI;
+
+    constructor(address proxyContractAddress) public ERC1155Inventory() {}
+
+    function createCollection(uint256 collectionId) external onlyOwner {
+        _createCollection(collectionId);
+    }
+
+    function setBaseMetadataURI(string calldata baseMetadataURI) external onlyOwner {
+        _baseMetadataURI = baseMetadataURI;
+    }
+
     function batchMint(
-        address _to,
-        uint256[] memory _ids,
-        uint256[] memory _amounts,
-        bytes memory _data
-    ) public onlyOwner {
-        _batchMint(_to, _ids, _amounts, _data);
+        address to,
+        uint256[] memory ids,
+        uint256[] memory values,
+        bytes memory data
+    ) public onlyMinter {
+        _batchMint(to, ids, values, data, false);
+    }
+
+    function safeBatchMint(
+        address to,
+        uint256[] memory ids,
+        uint256[] memory values,
+        bytes memory data
+    ) public onlyMinter {
+        _batchMint(to, ids, values, data, true);
+    }
+
+    function sameNFTCollectionBatchMint(address to, uint256[] memory ids) public onlyMinter {
+        _sameNFTCollectionBatchMint(to, ids, "", false);
+    }
+
+    function sameNFTCollectionSafeBatchMint(
+        address to,
+        uint256[] memory ids,
+        bytes memory data
+    ) public onlyMinter {
+        _sameNFTCollectionBatchMint(to, ids, data, true);
+    }
+
+    function burnFrom(
+        address from,
+        uint256 id,
+        uint256 value
+    ) external {
+        bool batch = false;
+        _burnFrom(from, id, value, batch);
+    }
+
+    function batchBurnFrom(
+        address from,
+        uint256[] calldata ids,
+        uint256[] calldata values
+    ) external {
+        _batchBurnFrom(from, ids, values);
+    }
+
+    function sameNFTCollectionBatchBurnFrom(address from, uint256[] calldata nftIds) external {
+        _sameNFTCollectionBatchBurnFrom(from, nftIds);
+    }
+
+    function _uri(uint256 id) internal override view returns (string memory) {
+        return string(abi.encodePacked("https://prefix/json/", id.toDecimalString()));
     }
 }

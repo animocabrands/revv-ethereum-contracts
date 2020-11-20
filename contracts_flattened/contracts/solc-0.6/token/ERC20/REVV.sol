@@ -4,7 +4,7 @@
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /*
  * @dev Provides information about the current execution context, including the
@@ -32,7 +32,7 @@ abstract contract Context {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /**
  * @dev Contract module which provides a basic access control mechanism, where
@@ -103,7 +103,7 @@ contract Ownable is Context {
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 contract WhitelistedOperators is Ownable {
 
@@ -132,7 +132,7 @@ contract WhitelistedOperators is Ownable {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /**
  * @dev Interface of the ERC165 standard, as defined in the
@@ -160,7 +160,7 @@ interface IERC165 {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /**
  * @dev Implementation of the {IERC165} interface.
@@ -216,7 +216,7 @@ contract ERC165 is IERC165 {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow
@@ -379,7 +379,7 @@ library SafeMath {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.2;
+pragma solidity ^0.6.2;
 
 /**
  * @dev Collection of functions related to the address type
@@ -551,7 +551,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -668,7 +668,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @dev Interface for commonly used additional ERC20 interfaces
@@ -706,7 +706,7 @@ interface IERC20Detailed {
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @dev Interface for additional ERC20 allowance features
@@ -777,7 +777,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 
 
@@ -1033,7 +1033,7 @@ abstract contract ERC20 is ERC165, Context, IERC20, IERC20Detailed, IERC20Allowa
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 
 abstract contract ERC20WithOperators is ERC20, WhitelistedOperators {
@@ -1115,7 +1115,7 @@ abstract contract ERC20WithOperators is ERC20, WhitelistedOperators {
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @title REVV

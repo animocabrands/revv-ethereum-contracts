@@ -1,10 +1,10 @@
 // Sources flattened with hardhat v2.0.3 https://hardhat.org
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC721/IERC721.sol@v4.0.0
+// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC721/IERC721.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @title ERC721 Non-Fungible Token Standard, basic interface
@@ -150,7 +150,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -267,7 +267,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @dev Library for managing an enumerable variant of Solidity's
@@ -450,7 +450,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @dev Library for managing
@@ -582,7 +582,7 @@ library EnumSet {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /*
  * @dev Provides information about the current execution context, including the
@@ -610,7 +610,7 @@ abstract contract Context {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /**
  * @dev Contract module which provides a basic access control mechanism, where
@@ -681,7 +681,7 @@ contract Ownable is Context {
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
     @title PayoutWallet
@@ -712,7 +712,7 @@ contract PayoutWallet is Ownable
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * Contract module which allows derived contracts to implement a mechanism for
@@ -774,7 +774,7 @@ contract Startable is Context {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /**
  * @dev Contract module which allows children to implement an emergency stop
@@ -866,7 +866,7 @@ contract Pausable is Context {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.2;
+pragma solidity ^0.6.2;
 
 /**
  * @dev Collection of functions related to the address type
@@ -1011,7 +1011,7 @@ library Address {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow
@@ -1174,7 +1174,7 @@ library SafeMath {
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @title ISale
@@ -1351,7 +1351,7 @@ interface ISale {
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 
 /**
@@ -1396,7 +1396,7 @@ interface IPurchaseNotificationsReceiver {
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 
 /**
@@ -1506,7 +1506,7 @@ abstract contract PurchaseLifeCycles {
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 
 
@@ -1917,7 +1917,7 @@ abstract contract AbstractSale is PurchaseLifeCycles, ISale, PayoutWallet, Start
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 
 /**
@@ -2007,7 +2007,7 @@ contract FixedPricesSale is AbstractSale {
 
 // SPDX-License-Identifier: MIT
 
- solidity =0.6.8;
+pragma solidity =0.6.8;
 
 
 

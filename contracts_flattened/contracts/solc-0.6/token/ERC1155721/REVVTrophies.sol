@@ -4,7 +4,7 @@
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 library UInt256ToDecimalString {
 
@@ -36,7 +36,7 @@ library UInt256ToDecimalString {
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 library Bytes32ToBase32String {
 
@@ -65,7 +65,7 @@ library Bytes32ToBase32String {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /**
  * @dev Library for managing
@@ -312,7 +312,7 @@ library EnumerableSet {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.2;
+pragma solidity ^0.6.2;
 
 /**
  * @dev Collection of functions related to the address type
@@ -457,7 +457,7 @@ library Address {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /*
  * @dev Provides information about the current execution context, including the
@@ -485,7 +485,7 @@ abstract contract Context {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 
 
@@ -704,7 +704,7 @@ abstract contract AccessControl is Context {
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * Contract module which allows derived contracts access control over token
@@ -771,7 +771,7 @@ contract MinterRole is AccessControl {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow
@@ -934,7 +934,7 @@ library SafeMath {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /**
  * @dev Base interface for a contract that will be called via the GSN from {IRelayHub}.
@@ -1014,7 +1014,7 @@ interface IRelayRecipient {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /**
  * @dev Interface for `RelayHub`, the core contract of the GSN. Users should not need to interact with this contract
@@ -1286,7 +1286,7 @@ interface IRelayHub {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 
 
@@ -1518,7 +1518,7 @@ abstract contract GSNRecipient is IRelayRecipient, Context {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /**
  * @dev Contract module which provides a basic access control mechanism, where
@@ -1589,7 +1589,7 @@ contract Ownable is Context {
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
     @title PayoutWallet
@@ -1647,7 +1647,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -1737,7 +1737,7 @@ interface IERC20 {
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 
 
@@ -1867,11 +1867,11 @@ abstract contract ERC20Fees is GSNRecipient, PayoutWallet
 }
 
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC721/IERC721.sol@v4.0.0
+// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC721/IERC721.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @title ERC721 Non-Fungible Token Standard, basic interface
@@ -1986,11 +1986,11 @@ interface IERC721 {
 }
 
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC721/IERC721Metadata.sol@v4.0.0
+// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC721/IERC721Metadata.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @title ERC721 Non-Fungible Token Standard, optional metadata extension
@@ -2021,11 +2021,11 @@ interface IERC721Metadata {
 }
 
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC721/IERC721Receiver.sol@v4.0.0
+// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC721/IERC721Receiver.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
     @title ERC721 Non-Fungible Token Standard, token receiver
@@ -2062,7 +2062,7 @@ interface IERC721Receiver {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /**
  * @dev Interface of the ERC165 standard, as defined in the
@@ -2090,7 +2090,7 @@ interface IERC165 {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /**
  * @dev Implementation of the {IERC165} interface.
@@ -2142,11 +2142,11 @@ contract ERC165 is IERC165 {
 }
 
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155.sol@v4.0.0
+// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @title ERC-1155 Multi Token Standard, basic interface
@@ -2265,11 +2265,11 @@ interface IERC1155 {
 }
 
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155MetadataURI.sol@v4.0.0
+// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155MetadataURI.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @title ERC-1155 Multi Token Standard, optional metadata URI extension
@@ -2290,11 +2290,11 @@ interface IERC1155MetadataURI {
 }
 
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC721/IERC721Exists.sol@v4.0.0
+// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC721/IERC721Exists.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @title ERC721 Non-Fungible Token Standard, optional exists extension
@@ -2311,11 +2311,11 @@ interface IERC721Exists {
 }
 
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155AssetCollections.sol@v4.0.0
+// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155AssetCollections.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @title ERC-1155 Multi Token Standard, optional Asset Collections extension
@@ -2325,12 +2325,11 @@ interface IERC721Exists {
  * within the same contract. We consider that there 3 types of identifiers:
  * (a) Fungible Collections identifiers, each representing a set of Fungible Tokens,
  * (b) Non-Fungible Collections identifiers, each representing a set of Non-Fungible Tokens,
- * (c) Non-Fungible Tokens identifiers.
- *
- * IERC1155 behavior MAY be updated as follow:
- * `balanceOf` and `balanceOfBatch`:
- * - when applied to a Non-Fungible Collection, MAY return the balance of Non-Fungible Tokens for this collection,
- * - when applied to a Non-Fungible Token, SHOULD return 1.
+ * (c) Non-Fungible Tokens identifiers. 
+
+
+ * In the same way a fungible token (represented by its balance) belongs to a particular id
+ * which can be used to store common information about this token, including the metadata.
  *
  * Note: The ERC-165 identifier for this interface is 0x469bd23f.
  */
@@ -2368,11 +2367,11 @@ interface IERC1155AssetCollections {
 }
 
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155TokenReceiver.sol@v4.0.0
+// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155TokenReceiver.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @title ERC-1155 Multi Token Standard, token receiver
@@ -2426,11 +2425,11 @@ interface IERC1155TokenReceiver {
 }
 
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/ERC1155AssetsInventory.sol@v4.0.0
+// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/ERC1155AssetsInventory.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 
 
@@ -3025,11 +3024,11 @@ abstract contract ERC1155AssetsInventory is IERC1155, IERC1155MetadataURI, IERC1
 }
 
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155721/AssetsInventory.sol@v4.0.0
+// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155721/AssetsInventory.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 
 
@@ -3281,11 +3280,11 @@ abstract contract AssetsInventory is IERC721, IERC721Metadata, ERC1155AssetsInve
 }
 
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/metadata/ICoreMetadataDelegator.sol@v4.0.0
+// File @animoca/ethereum-contracts-assets_inventory/contracts/metadata/ICoreMetadataDelegator.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @dev Interface for an Inventory Metadata Delegator.
@@ -3299,11 +3298,11 @@ interface ICoreMetadataDelegator {
 }
 
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/metadata/ICoreMetadata.sol@v4.0.0
+// File @animoca/ethereum-contracts-assets_inventory/contracts/metadata/ICoreMetadata.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @dev Interface for retrieving core metadata attributes encoded in an integer
@@ -3352,11 +3351,11 @@ interface ICoreMetadata {
 }
 
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/metadata/CoreMetadataDelegator.sol@v4.0.0
+// File @animoca/ethereum-contracts-assets_inventory/contracts/metadata/CoreMetadataDelegator.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 
 
@@ -3385,7 +3384,7 @@ abstract contract CoreMetadataDelegator is ICoreMetadataDelegator, ERC165 {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.8;
+pragma solidity ^0.6.8;
 
 
 

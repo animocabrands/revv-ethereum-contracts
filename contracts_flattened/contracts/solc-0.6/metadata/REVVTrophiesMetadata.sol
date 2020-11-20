@@ -4,7 +4,7 @@
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /**
  * @dev Interface of the ERC165 standard, as defined in the
@@ -32,7 +32,7 @@ interface IERC165 {
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.0;
+pragma solidity ^0.6.0;
 
 /**
  * @dev Implementation of the {IERC165} interface.
@@ -88,7 +88,7 @@ contract ERC165 is IERC165 {
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 library UInt256Extract {
 
@@ -144,7 +144,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @dev Library for managing an enumerable variant of Solidity's
@@ -296,11 +296,11 @@ library EnumMap {
 }
 
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC721/IERC721Exists.sol@v4.0.0
+// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC721/IERC721Exists.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @title ERC721 Non-Fungible Token Standard, optional exists extension
@@ -317,11 +317,11 @@ interface IERC721Exists {
 }
 
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155AssetCollections.sol@v4.0.0
+// File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155AssetCollections.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @title ERC-1155 Multi Token Standard, optional Asset Collections extension
@@ -331,12 +331,11 @@ interface IERC721Exists {
  * within the same contract. We consider that there 3 types of identifiers:
  * (a) Fungible Collections identifiers, each representing a set of Fungible Tokens,
  * (b) Non-Fungible Collections identifiers, each representing a set of Non-Fungible Tokens,
- * (c) Non-Fungible Tokens identifiers.
- *
- * IERC1155 behavior MAY be updated as follow:
- * `balanceOf` and `balanceOfBatch`:
- * - when applied to a Non-Fungible Collection, MAY return the balance of Non-Fungible Tokens for this collection,
- * - when applied to a Non-Fungible Token, SHOULD return 1.
+ * (c) Non-Fungible Tokens identifiers. 
+
+
+ * In the same way a fungible token (represented by its balance) belongs to a particular id
+ * which can be used to store common information about this token, including the metadata.
  *
  * Note: The ERC-165 identifier for this interface is 0x469bd23f.
  */
@@ -374,11 +373,11 @@ interface IERC1155AssetCollections {
 }
 
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/metadata/ICoreMetadata.sol@v4.0.0
+// File @animoca/ethereum-contracts-assets_inventory/contracts/metadata/ICoreMetadata.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @dev Interface for retrieving core metadata attributes encoded in an integer
@@ -427,11 +426,11 @@ interface ICoreMetadata {
 }
 
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/metadata/IInventoryMetadata.sol@v4.0.0
+// File @animoca/ethereum-contracts-assets_inventory/contracts/metadata/IInventoryMetadata.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 /**
  * @dev Interface for retrieving core metadata attributes encoded in an integer
@@ -454,11 +453,11 @@ interface IInventoryMetadata {
 }
 
 
-// File @animoca/ethereum-contracts-assets_inventory/contracts/metadata/InventoryMetadata.sol@v4.0.0
+// File @animoca/ethereum-contracts-assets_inventory/contracts/metadata/InventoryMetadata.sol@v5.0.0
 
 // SPDX-License-Identifier: MIT
 
- solidity 0.6.8;
+pragma solidity 0.6.8;
 
 
 
@@ -732,7 +731,7 @@ abstract contract InventoryMetadata is IInventoryMetadata, ICoreMetadata, ERC165
 
 // SPDX-License-Identifier: MIT
 
- solidity ^0.6.6;
+pragma solidity ^0.6.6;
 
 contract REVVTrophiesMetadata is InventoryMetadata {
     uint256 private constant _nfMaskLength = 32;
