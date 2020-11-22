@@ -1,90 +1,145 @@
-const {expect} = require('chai');
-const {waffle, ethers} = require('hardhat');
-const {constants, utils, BigNumber, getContractFactory} = ethers;
-const {deployContract, link, createFixtureLoader, provider} = waffle;
+const {artifacts, web3} = require('hardhat');
+const {BN, stringToHex, utf8ToHex, padRight, toWei, toChecksumAddress} = web3.utils;
+const {ether, balance, expectEvent, expectRevert} = require('@openzeppelin/test-helpers');
+const {constants} = require('@animoca/ethereum-contracts-core_library');
+const {EthAddress, ZeroAddress, Two} = constants;
 
-const {initContracts, initContractsAndMintNft} = require('./REVVSale.fixtures');
+function stringToBytes32(value) {
+  return padRight(utf8ToHex(value.slice(0, 32)), 64);
+}
 
-const {EthAddress} = require('../../src/constants');
+const sku = stringToBytes32('flash REVV');
+const daiPrice = new BN('6660000000000000');
+const ethPrice = new BN('16650000000000');
 
-const [deployer, purchaser, payout, recipient] = provider.getWallets();
+const totalSupply = '7500000'; // 7.5M
+const maxPurchaseAmount = '700000'; // 700k
 
-// This is a workaround as described in https://github.com/nomiclabs/hardhat/issues/849
-// import loadFixture from waffle when fixed
-const loadFixture = waffle.createFixtureLoader([deployer, purchaser, payout], provider);
+let deployer, purchaser, payout;
 
 describe('REVVSale', function () {
+  before(async function () {
+    [deployer, purchaser, payout] = await web3.eth.getAccounts();
+  });
+  beforeEach(async function () {
+    const DAI = artifacts.require('ERC20Mock');
+    this.dai = await DAI.new(toWei('100000000'), {from: deployer});
+    await this.dai.transfer(purchaser, toWei('100000000'), {from: deployer});
+
+    const REVV = artifacts.require('REVV');
+    this.revv = await REVV.new([deployer], [toWei(totalSupply)], {from: deployer});
+
+    const Bytes = artifacts.require('Bytes');
+    const bytes = await Bytes.new({from: deployer});
+
+    const Inventory = artifacts.require('DeltaTimeInventory');
+    await Inventory.link(bytes);
+    this.inventory = await Inventory.new(this.revv.address, payout, {from: deployer});
+
+    const Sale = artifacts.require('REVVSale');
+    this.sale = await Sale.new(this.revv.address, this.inventory.address, payout, {from: deployer});
+
+    await this.revv.approve(this.sale.address, toWei(totalSupply), {from: deployer});
+    await this.sale.createSku(sku, totalSupply, maxPurchaseAmount, ZeroAddress, {from: deployer});
+
+    const prices = {}; // in wei
+    prices[this.dai.address] = daiPrice;
+    prices[EthAddress] = ethPrice;
+    await this.sale.updateSkuPricing(sku, Object.keys(prices), Object.values(prices), {from: deployer});
+
+    await this.sale.start({from: deployer});
+  });
   describe('purchaseFor()', function () {
     it('reverts if purchaser is not an NFT owner', async function () {
-      const {contracts, params} = await loadFixture(initContracts);
-      console.log(contracts.sale.address);
-
-      const quantity = constants.Two;
+      const quantity = Two;
       const paymentToken = EthAddress;
 
-      await expect(
-        contracts.sale.connect(purchaser).purchaseFor(purchaser.address, paymentToken, params.sku, quantity, '0x', {
-          value: params.ethPrice.mul(constants.Two),
-        })
-      ).to.be.revertedWith('REVVSale: must be a NFT owner');
+      await expectRevert(
+        this.sale.purchaseFor(purchaser, paymentToken, sku, quantity, '0x', {
+          from: purchaser,
+          value: ethPrice.mul(quantity),
+        }),
+        'REVVSale: must be a NFT owner'
+      );
     });
 
     it('should purchase successfully with ETH', async function () {
-      const {contracts, params} = await loadFixture(initContractsAndMintNft);
-      console.log(contracts.sale.address);
+      // Mint an NFT to the purchaser
+      await this.inventory.batchMint(
+        [purchaser],
+        ['0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'], // an NFT
+        ['0x'],
+        [1],
+        true,
+        {
+          from: deployer,
+        }
+      );
 
-      const quantity = constants.One;
+      const quantity = 1;
       const paymentToken = EthAddress;
 
-      await expect(
-        contracts.sale.connect(purchaser).purchaseFor(purchaser.address, paymentToken, params.sku, quantity, '0x', {
-          value: params.ethPrice,
-        })
-      )
-        .to.emit(contracts.sale, 'Purchase')
-        .withArgs(
-          purchaser.address,
-          purchaser.address,
-          paymentToken,
-          params.sku,
-          quantity,
-          '0x',
-          params.ethPrice,
-          [],
-          [],
-          []
-        )
-        .to.emit(contracts.revv, 'Transfer')
-        .withArgs(contracts.sale.address, purchaser.address, utils.parseEther('1'));
+      const previous = await balance.current(purchaser);
+      const receipt = await this.sale.purchaseFor(purchaser, paymentToken, sku, quantity, '0x', {
+        from: purchaser,
+        value: ethPrice,
+        gasPrice: 0,
+      });
+      const delta = (await balance.current(purchaser)).sub(previous);
+      expect(delta).to.be.bignumber.equal(ethPrice.neg());
+
+      await expectEvent(receipt, 'Purchase', {
+        purchaser: purchaser,
+        recipient: purchaser,
+        token: toChecksumAddress(paymentToken),
+        sku,
+        quantity,
+        userData: null,
+        totalPrice: ethPrice,
+        pricingData: [],
+        paymentData: [],
+        deliveryData: [],
+      });
+
+      await expectEvent.inTransaction(receipt.tx, this.revv, 'Transfer', {
+        _from: this.sale.address,
+        _to: purchaser,
+        _value: toWei('1'),
+      });
     });
 
     it('should purchase successfully with DAI', async function () {
-      const {contracts, params} = await loadFixture(initContractsAndMintNft);
+      // Mint an NFT to the purchaser
+      await this.inventory.batchMint(
+        [purchaser],
+        ['0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'], // an NFT
+        ['0x'],
+        [1],
+        true,
+        {
+          from: deployer,
+        }
+      );
 
-      const quantity = constants.One;
-      const paymentToken = contracts.dai.address;
-      await contracts.dai.connect(purchaser).approve(contracts.sale.address, utils.parseEther('100000000'));
+      const quantity = 1;
+      const paymentToken = this.dai.address;
+      await this.dai.approve(this.sale.address, daiPrice, {from: purchaser});
 
-      await expect(
-        contracts.sale.connect(purchaser).purchaseFor(purchaser.address, paymentToken, params.sku, quantity, '0x', {
-          value: params.ethPrice,
-        })
-      )
-        .to.emit(contracts.sale, 'Purchase')
-        .withArgs(
-          purchaser.address,
-          purchaser.address,
-          paymentToken,
-          params.sku,
-          quantity,
-          '0x',
-          params.daiPrice,
-          [],
-          [],
-          []
-        )
-        .to.emit(contracts.revv, 'Transfer')
-        .withArgs(contracts.sale.address, purchaser.address, utils.parseEther('1'));
+      const receipt = await this.sale.purchaseFor(purchaser, paymentToken, sku, quantity, '0x', {
+        from: purchaser,
+      });
+
+      await expectEvent.inTransaction(receipt.tx, this.dai, 'Transfer', {
+        _from: purchaser,
+        _to: payout,
+        _value: daiPrice,
+      });
+
+      await expectEvent.inTransaction(receipt.tx, this.revv, 'Transfer', {
+        _from: this.sale.address,
+        _to: purchaser,
+        _value: toWei('1'),
+      });
     });
   });
 });

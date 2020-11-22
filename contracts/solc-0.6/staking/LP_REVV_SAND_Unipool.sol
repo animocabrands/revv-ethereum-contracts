@@ -45,7 +45,9 @@ contract LPTokenWrapper {
     }
 }
 
+// solhint-disable-next-line contract-name-camelcase
 contract LP_REVV_SAND_Unipool is LPTokenWrapper, IRewardDistributionRecipient {
+    // solhint-disable-next-line var-name-mixedcase
     uint256 public immutable DURATION;
     IERC20Mintable public immutable rewardToken;
 

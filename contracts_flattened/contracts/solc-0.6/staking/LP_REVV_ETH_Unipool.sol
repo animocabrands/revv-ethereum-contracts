@@ -37,8 +37,6 @@ library Math {
 
 // File @openzeppelin/contracts/math/SafeMath.sol@v3.2.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.6.0;
 
 /**
@@ -200,8 +198,6 @@ library SafeMath {
 
 // File @openzeppelin/contracts/token/ERC20/IERC20.sol@v3.2.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.6.0;
 
 /**
@@ -280,8 +276,6 @@ interface IERC20 {
 
 
 // File @openzeppelin/contracts/utils/Address.sol@v3.2.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.6.2;
 
@@ -426,8 +420,6 @@ library Address {
 
 // File @openzeppelin/contracts/token/ERC20/SafeERC20.sol@v3.2.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.6.0;
 
 
@@ -503,8 +495,6 @@ library SafeERC20 {
 
 // File @openzeppelin/contracts/GSN/Context.sol@v3.2.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.6.0;
 
 /*
@@ -530,8 +520,6 @@ abstract contract Context {
 
 
 // File @openzeppelin/contracts/access/Ownable.sol@v3.2.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.6.0;
 
@@ -602,8 +590,6 @@ contract Ownable is Context {
 
 // File contracts/solc-0.6/staking/IRewardDistributionRecipient.sol
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 abstract contract IRewardDistributionRecipient is Ownable {
@@ -612,6 +598,7 @@ abstract contract IRewardDistributionRecipient is Ownable {
     function notifyRewardAmount(uint256 reward) external virtual;
 
     modifier onlyRewardDistribution() {
+        // solhint-disable-next-line reason-string
         require(_msgSender() == rewardDistribution, "Caller is not reward distribution");
         _;
     }
@@ -623,8 +610,6 @@ abstract contract IRewardDistributionRecipient is Ownable {
 
 
 // File contracts/solc-0.6/staking/LP_REVV_ETH_Unipool.sol
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity 0.6.8;
 
@@ -665,7 +650,9 @@ contract LPTokenWrapper {
     }
 }
 
-contract Unipool is LPTokenWrapper, IRewardDistributionRecipient {
+// solhint-disable-next-line contract-name-camelcase
+contract LP_REVV_ETH_Unipool is LPTokenWrapper, IRewardDistributionRecipient {
+    // solhint-disable-next-line var-name-mixedcase
     uint256 public immutable DURATION;
 
     uint256 public periodFinish = 0;

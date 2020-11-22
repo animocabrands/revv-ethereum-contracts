@@ -10,6 +10,7 @@ abstract contract IRewardDistributionRecipient is Ownable {
     function notifyRewardAmount(uint256 reward) external virtual;
 
     modifier onlyRewardDistribution() {
+        // solhint-disable-next-line reason-string
         require(_msgSender() == rewardDistribution, "Caller is not reward distribution");
         _;
     }

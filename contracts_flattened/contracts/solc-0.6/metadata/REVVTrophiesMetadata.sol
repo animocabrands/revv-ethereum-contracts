@@ -30,8 +30,6 @@ interface IERC165 {
 
 // File @openzeppelin/contracts/introspection/ERC165.sol@v3.2.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.6.0;
 
 /**
@@ -86,8 +84,6 @@ contract ERC165 is IERC165 {
 
 // File @animoca/ethereum-contracts-core_library/contracts/utils/types/UInt256Extract.sol@v3.1.1
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 library UInt256Extract {
@@ -141,8 +137,6 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity 0.6.8;
 
@@ -298,8 +292,6 @@ library EnumMap {
 
 // File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC721/IERC721Exists.sol@v5.0.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 /**
@@ -318,8 +310,6 @@ interface IERC721Exists {
 
 
 // File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155AssetCollections.sol@v5.0.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity 0.6.8;
 
@@ -375,8 +365,6 @@ interface IERC1155AssetCollections {
 
 // File @animoca/ethereum-contracts-assets_inventory/contracts/metadata/ICoreMetadata.sol@v5.0.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 /**
@@ -428,8 +416,6 @@ interface ICoreMetadata {
 
 // File @animoca/ethereum-contracts-assets_inventory/contracts/metadata/IInventoryMetadata.sol@v5.0.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 /**
@@ -454,8 +440,6 @@ interface IInventoryMetadata {
 
 
 // File @animoca/ethereum-contracts-assets_inventory/contracts/metadata/InventoryMetadata.sol@v5.0.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity 0.6.8;
 
@@ -729,19 +713,17 @@ abstract contract InventoryMetadata is IInventoryMetadata, ICoreMetadata, ERC165
 
 // File contracts/solc-0.6/metadata/REVVTrophiesMetadata.sol
 
-// SPDX-License-Identifier: MIT
-
-pragma solidity ^0.6.6;
+pragma solidity ^0.6.8;
 
 contract REVVTrophiesMetadata is InventoryMetadata {
-    uint256 private constant _nfMaskLength = 32;
+    uint256 internal constant NF_MASK_LENGTH = 32;
 
     modifier onlyDelegator() {
-        require(msg.sender == inventoryMetadataDelegator, "InventoryMetadata: delegator only");
+        require(msg.sender == inventoryMetadataDelegator, "Metadata: delegator only");
         _;
     }
 
-    constructor(address delegator) public InventoryMetadata(_nfMaskLength, delegator) {
+    constructor(address delegator) public InventoryMetadata(NF_MASK_LENGTH, delegator) {
         _setAttribute(_defaultNonFungibleLayout, "type", 8, 240);
         _setAttribute(_defaultNonFungibleLayout, "subType", 8, 232);
         _setAttribute(_defaultNonFungibleLayout, "season", 8, 224);

@@ -9,8 +9,11 @@ import "@animoca/ethereum-contracts-core_library/contracts/access/MinterRole.sol
  * @title RewardToken
  */
 contract RewardToken is ERC20WithOperators, MinterRole {
+    // solhint-disable-next-line const-name-snakecase
     string public constant override name = "RewardToken";
+    // solhint-disable-next-line const-name-snakecase
     string public constant override symbol = "RT";
+    // solhint-disable-next-line const-name-snakecase
     uint8 public constant override decimals = 18;
 
     function mint(address holder, uint256 amount) public onlyMinter {

@@ -30,8 +30,6 @@ abstract contract Context {
 
 // File @openzeppelin/contracts/access/Ownable.sol@v3.2.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.6.0;
 
 /**
@@ -101,8 +99,6 @@ contract Ownable is Context {
 
 // File @animoca/ethereum-contracts-core_library/contracts/access/WhitelistedOperators.sol@v3.1.1
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 contract WhitelistedOperators is Ownable {
@@ -130,8 +126,6 @@ contract WhitelistedOperators is Ownable {
 
 // File @openzeppelin/contracts/introspection/IERC165.sol@v3.2.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.6.0;
 
 /**
@@ -157,8 +151,6 @@ interface IERC165 {
 
 
 // File @openzeppelin/contracts/introspection/ERC165.sol@v3.2.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.6.0;
 
@@ -213,8 +205,6 @@ contract ERC165 is IERC165 {
 
 
 // File @openzeppelin/contracts/math/SafeMath.sol@v3.2.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.6.0;
 
@@ -376,8 +366,6 @@ library SafeMath {
 
 
 // File @openzeppelin/contracts/utils/Address.sol@v3.2.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.6.2;
 
@@ -549,8 +537,6 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 /**
@@ -666,8 +652,6 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 /**
@@ -703,8 +687,6 @@ interface IERC20Detailed {
 
 
 // File @animoca/ethereum-contracts-erc20_base/contracts/token/ERC20/IERC20Allowance.sol@v3.0.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity 0.6.8;
 
@@ -774,8 +756,6 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity 0.6.8;
 
@@ -1031,8 +1011,6 @@ abstract contract ERC20 is ERC165, Context, IERC20, IERC20Detailed, IERC20Allowa
 
 // File @animoca/ethereum-contracts-erc20_base/contracts/token/ERC20/ERC20WithOperators.sol@v3.0.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 
@@ -1113,16 +1091,17 @@ abstract contract ERC20WithOperators is ERC20, WhitelistedOperators {
 
 // File contracts/solc-0.6/token/ERC20/REVV.sol
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 /**
  * @title REVV
  */
 contract REVV is ERC20WithOperators {
+    // solhint-disable-next-line const-name-snakecase
     string public constant override name = "REVV";
+    // solhint-disable-next-line const-name-snakecase
     string public constant override symbol = "REVV";
+    // solhint-disable-next-line const-name-snakecase
     uint8 public constant override decimals = 18;
 
     constructor(address[] memory holders, uint256[] memory amounts) public ERC20WithOperators() {

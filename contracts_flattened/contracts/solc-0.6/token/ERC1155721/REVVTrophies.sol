@@ -34,8 +34,6 @@ library UInt256ToDecimalString {
 
 // File @animoca/ethereum-contracts-core_library/contracts/utils/types/Bytes32ToBase32String.sol@v3.1.1
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 library Bytes32ToBase32String {
@@ -62,8 +60,6 @@ library Bytes32ToBase32String {
 
 
 // File @openzeppelin/contracts/utils/EnumerableSet.sol@v3.2.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.6.0;
 
@@ -310,8 +306,6 @@ library EnumerableSet {
 
 // File @openzeppelin/contracts/utils/Address.sol@v3.2.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.6.2;
 
 /**
@@ -455,8 +449,6 @@ library Address {
 
 // File @openzeppelin/contracts/GSN/Context.sol@v3.2.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.6.0;
 
 /*
@@ -482,8 +474,6 @@ abstract contract Context {
 
 
 // File @openzeppelin/contracts/access/AccessControl.sol@v3.2.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.6.0;
 
@@ -702,8 +692,6 @@ abstract contract AccessControl is Context {
 
 // File @animoca/ethereum-contracts-core_library/contracts/access/MinterRole.sol@v3.1.1
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 /**
@@ -768,8 +756,6 @@ contract MinterRole is AccessControl {
 
 
 // File @openzeppelin/contracts/math/SafeMath.sol@v3.2.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.6.0;
 
@@ -932,8 +918,6 @@ library SafeMath {
 
 // File @openzeppelin/contracts/GSN/IRelayRecipient.sol@v3.2.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.6.0;
 
 /**
@@ -1011,8 +995,6 @@ interface IRelayRecipient {
 
 
 // File @openzeppelin/contracts/GSN/IRelayHub.sol@v3.2.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.6.0;
 
@@ -1284,8 +1266,6 @@ interface IRelayHub {
 
 // File @openzeppelin/contracts/GSN/GSNRecipient.sol@v3.2.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.6.0;
 
 
@@ -1516,8 +1496,6 @@ abstract contract GSNRecipient is IRelayRecipient, Context {
 
 // File @openzeppelin/contracts/access/Ownable.sol@v3.2.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.6.0;
 
 /**
@@ -1587,8 +1565,6 @@ contract Ownable is Context {
 
 // File @animoca/ethereum-contracts-core_library/contracts/payment/PayoutWallet.sol@v3.1.1
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 /**
@@ -1644,8 +1620,6 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity 0.6.8;
 
@@ -1734,8 +1708,6 @@ interface IERC20 {
 
 
 // File @animoca/ethereum-contracts-erc20_base/contracts/metatx/ERC20Fees.sol@v3.0.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity 0.6.8;
 
@@ -1869,8 +1841,6 @@ abstract contract ERC20Fees is GSNRecipient, PayoutWallet
 
 // File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC721/IERC721.sol@v5.0.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 /**
@@ -1988,8 +1958,6 @@ interface IERC721 {
 
 // File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC721/IERC721Metadata.sol@v5.0.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 /**
@@ -2022,8 +1990,6 @@ interface IERC721Metadata {
 
 
 // File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC721/IERC721Receiver.sol@v5.0.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity 0.6.8;
 
@@ -2060,8 +2026,6 @@ interface IERC721Receiver {
 
 // File @openzeppelin/contracts/introspection/IERC165.sol@v3.2.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.6.0;
 
 /**
@@ -2087,8 +2051,6 @@ interface IERC165 {
 
 
 // File @openzeppelin/contracts/introspection/ERC165.sol@v3.2.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.6.0;
 
@@ -2143,8 +2105,6 @@ contract ERC165 is IERC165 {
 
 
 // File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155.sol@v5.0.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity 0.6.8;
 
@@ -2267,8 +2227,6 @@ interface IERC1155 {
 
 // File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155MetadataURI.sol@v5.0.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 /**
@@ -2292,8 +2250,6 @@ interface IERC1155MetadataURI {
 
 // File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC721/IERC721Exists.sol@v5.0.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 /**
@@ -2312,8 +2268,6 @@ interface IERC721Exists {
 
 
 // File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155AssetCollections.sol@v5.0.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity 0.6.8;
 
@@ -2368,8 +2322,6 @@ interface IERC1155AssetCollections {
 
 
 // File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155TokenReceiver.sol@v5.0.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity 0.6.8;
 
@@ -2426,8 +2378,6 @@ interface IERC1155TokenReceiver {
 
 
 // File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/ERC1155AssetsInventory.sol@v5.0.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity 0.6.8;
 
@@ -3026,8 +2976,6 @@ abstract contract ERC1155AssetsInventory is IERC1155, IERC1155MetadataURI, IERC1
 
 // File @animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155721/AssetsInventory.sol@v5.0.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 
@@ -3282,8 +3230,6 @@ abstract contract AssetsInventory is IERC721, IERC721Metadata, ERC1155AssetsInve
 
 // File @animoca/ethereum-contracts-assets_inventory/contracts/metadata/ICoreMetadataDelegator.sol@v5.0.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 /**
@@ -3299,8 +3245,6 @@ interface ICoreMetadataDelegator {
 
 
 // File @animoca/ethereum-contracts-assets_inventory/contracts/metadata/ICoreMetadata.sol@v5.0.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity 0.6.8;
 
@@ -3353,8 +3297,6 @@ interface ICoreMetadata {
 
 // File @animoca/ethereum-contracts-assets_inventory/contracts/metadata/CoreMetadataDelegator.sol@v5.0.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 
@@ -3382,8 +3324,6 @@ abstract contract CoreMetadataDelegator is ICoreMetadataDelegator, ERC165 {
 
 // File contracts/solc-0.6/token/ERC1155721/REVVTrophies.sol
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.6.8;
 
 
@@ -3403,12 +3343,14 @@ contract REVVTrophies is AssetsInventory, ERC20Fees, CoreMetadataDelegator, Mint
     using UInt256ToDecimalString for uint256;
     using Bytes32ToBase32String for bytes32;
 
+    // solhint-disable-next-line const-name-snakecase
     string public constant override name = "REVV Trophies";
+    // solhint-disable-next-line const-name-snakecase
     string public constant override symbol = "REVV-T";
     string private _uriPrefix = "https://revvmotorsport.com/trophies/json/";
-    uint256 private constant _nfMaskLength = 32;
+    uint256 private constant _NF_MASK_LENGTH = 32;
 
-    constructor(address gasTokenAddress, address payoutWallet) public AssetsInventory(_nfMaskLength) ERC20Fees(gasTokenAddress, payoutWallet) {}
+    constructor(address gasTokenAddress, address payoutWallet) public AssetsInventory(_NF_MASK_LENGTH) ERC20Fees(gasTokenAddress, payoutWallet) {}
 
     function setInventoryMetadataImplementer(address implementer) external onlyOwner {
         _setInventoryMetadataImplementer(implementer);

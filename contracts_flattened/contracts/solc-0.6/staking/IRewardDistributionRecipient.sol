@@ -30,8 +30,6 @@ abstract contract Context {
 
 // File @openzeppelin/contracts/access/Ownable.sol@v3.2.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.6.0;
 
 /**
@@ -101,8 +99,6 @@ contract Ownable is Context {
 
 // File contracts/solc-0.6/staking/IRewardDistributionRecipient.sol
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 abstract contract IRewardDistributionRecipient is Ownable {
@@ -111,6 +107,7 @@ abstract contract IRewardDistributionRecipient is Ownable {
     function notifyRewardAmount(uint256 reward) external virtual;
 
     modifier onlyRewardDistribution() {
+        // solhint-disable-next-line reason-string
         require(_msgSender() == rewardDistribution, "Caller is not reward distribution");
         _;
     }

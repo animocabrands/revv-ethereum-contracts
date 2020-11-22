@@ -37,8 +37,6 @@ library Math {
 
 // File @openzeppelin/contracts/math/SafeMath.sol@v3.2.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.6.0;
 
 /**
@@ -200,8 +198,6 @@ library SafeMath {
 
 // File @openzeppelin/contracts/token/ERC20/IERC20.sol@v3.2.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.6.0;
 
 /**
@@ -280,8 +276,6 @@ interface IERC20 {
 
 
 // File @openzeppelin/contracts/utils/Address.sol@v3.2.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.6.2;
 
@@ -426,8 +420,6 @@ library Address {
 
 // File @openzeppelin/contracts/token/ERC20/SafeERC20.sol@v3.2.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.6.0;
 
 
@@ -503,8 +495,6 @@ library SafeERC20 {
 
 // File @openzeppelin/contracts/GSN/Context.sol@v3.2.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.6.0;
 
 /*
@@ -530,8 +520,6 @@ abstract contract Context {
 
 
 // File @openzeppelin/contracts/access/Ownable.sol@v3.2.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.6.0;
 
@@ -602,8 +590,6 @@ contract Ownable is Context {
 
 // File contracts/solc-0.6/staking/IRewardDistributionRecipient.sol
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 abstract contract IRewardDistributionRecipient is Ownable {
@@ -612,6 +598,7 @@ abstract contract IRewardDistributionRecipient is Ownable {
     function notifyRewardAmount(uint256 reward) external virtual;
 
     modifier onlyRewardDistribution() {
+        // solhint-disable-next-line reason-string
         require(_msgSender() == rewardDistribution, "Caller is not reward distribution");
         _;
     }
@@ -624,12 +611,14 @@ abstract contract IRewardDistributionRecipient is Ownable {
 
 // File contracts/solc-0.6/staking/LP_REVV_SAND_Unipool.sol
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 
 
+
+interface IERC20Mintable {
+    function mint(address holder, uint256 amount) external;
+}
 
 contract LPTokenWrapper {
     using SafeMath for uint256;
@@ -665,9 +654,11 @@ contract LPTokenWrapper {
     }
 }
 
-contract Unipool is LPTokenWrapper, IRewardDistributionRecipient {
+// solhint-disable-next-line contract-name-camelcase
+contract LP_REVV_SAND_Unipool is LPTokenWrapper, IRewardDistributionRecipient {
+    // solhint-disable-next-line var-name-mixedcase
     uint256 public immutable DURATION;
-    IERC20 public immutable rewardToken;
+    IERC20Mintable public immutable rewardToken;
 
     uint256 public periodFinish = 0;
     uint256 public rewardRate = 0;
@@ -683,7 +674,7 @@ contract Unipool is LPTokenWrapper, IRewardDistributionRecipient {
 
     constructor(
         IERC20 uni_,
-        IERC20 rewardToken_,
+        IERC20Mintable rewardToken_,
         uint256 duration
     ) public LPTokenWrapper(uni_) {
         rewardToken = rewardToken_;
@@ -737,9 +728,7 @@ contract Unipool is LPTokenWrapper, IRewardDistributionRecipient {
         uint256 reward = earned(msg.sender);
         if (reward > 0) {
             rewards[msg.sender] = 0;
-            rewardToken.safeTransfer(msg.sender, reward);
-            // or
-            // rewardToken.mint(msg.sender, reward);
+            rewardToken.mint(msg.sender, reward);
             emit RewardPaid(msg.sender, reward);
         }
     }
@@ -754,7 +743,6 @@ contract Unipool is LPTokenWrapper, IRewardDistributionRecipient {
         }
         lastUpdateTime = block.timestamp;
         periodFinish = block.timestamp.add(DURATION);
-        rewardToken.safeTransferFrom(msg.sender, address(this), reward);
         emit RewardAdded(reward);
     }
 }

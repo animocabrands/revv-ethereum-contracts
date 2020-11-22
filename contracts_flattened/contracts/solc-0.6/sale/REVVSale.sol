@@ -148,8 +148,6 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 /**
@@ -264,8 +262,6 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity 0.6.8;
 
@@ -448,8 +444,6 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 /**
@@ -580,8 +574,6 @@ library EnumSet {
 
 // File @openzeppelin/contracts/GSN/Context.sol@v3.2.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.6.0;
 
 /*
@@ -607,8 +599,6 @@ abstract contract Context {
 
 
 // File @openzeppelin/contracts/access/Ownable.sol@v3.2.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.6.0;
 
@@ -679,8 +669,6 @@ contract Ownable is Context {
 
 // File @animoca/ethereum-contracts-core_library/contracts/payment/PayoutWallet.sol@v3.1.1
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 /**
@@ -709,8 +697,6 @@ contract PayoutWallet is Ownable
 
 
 // File @animoca/ethereum-contracts-core_library/contracts/utils/Startable.sol@v3.1.1
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity 0.6.8;
 
@@ -771,8 +757,6 @@ contract Startable is Context {
 
 
 // File @openzeppelin/contracts/utils/Pausable.sol@v3.2.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.6.0;
 
@@ -863,8 +847,6 @@ contract Pausable is Context {
 
 
 // File @openzeppelin/contracts/utils/Address.sol@v3.2.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.6.2;
 
@@ -1008,8 +990,6 @@ library Address {
 
 
 // File @openzeppelin/contracts/math/SafeMath.sol@v3.2.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.6.0;
 
@@ -1171,8 +1151,6 @@ library SafeMath {
 
 
 // File @animoca/ethereum-contracts-sale_base/contracts/sale/interfaces/ISale.sol@v6.0.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity 0.6.8;
 
@@ -1349,8 +1327,6 @@ interface ISale {
 
 // File @animoca/ethereum-contracts-sale_base/contracts/sale/interfaces/IPurchaseNotificationsReceiver.sol@v6.0.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 
@@ -1393,8 +1369,6 @@ interface IPurchaseNotificationsReceiver {
 
 
 // File @animoca/ethereum-contracts-sale_base/contracts/sale/PurchaseLifeCycles.sol@v6.0.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity 0.6.8;
 
@@ -1503,8 +1477,6 @@ abstract contract PurchaseLifeCycles {
 
 
 // File @animoca/ethereum-contracts-sale_base/contracts/sale/AbstractSale.sol@v6.0.0
-
-// SPDX-License-Identifier: MIT
 
 pragma solidity 0.6.8;
 
@@ -1915,8 +1887,6 @@ abstract contract AbstractSale is PurchaseLifeCycles, ISale, PayoutWallet, Start
 
 // File @animoca/ethereum-contracts-sale_base/contracts/sale/FixedPricesSale.sol@v6.0.0
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity 0.6.8;
 
 
@@ -2005,8 +1975,6 @@ contract FixedPricesSale is AbstractSale {
 
 // File contracts/solc-0.6/sale/REVVSale.sol
 
-// SPDX-License-Identifier: MIT
-
 pragma solidity =0.6.8;
 
 
@@ -2029,6 +1997,7 @@ contract REVVSale is FixedPricesSale {
         address payable payoutWallet_
     ) public FixedPricesSale(payoutWallet_, 64, 32) {
         require(revv_ != address(0), "REVVSale: zero address REVV ");
+        // solhint-disable-next-line reason-string
         require(deltaTimeInventory_ != address(0), "REVVSale: zero address inventory ");
         revv = IERC20(revv_);
         deltaTimeInventory = IERC721(deltaTimeInventory_);

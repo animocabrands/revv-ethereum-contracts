@@ -8,8 +8,11 @@ import "@animoca/ethereum-contracts-erc20_base/contracts/token/ERC20/ERC20WithOp
  * @title REVV
  */
 contract REVV is ERC20WithOperators {
+    // solhint-disable-next-line const-name-snakecase
     string public constant override name = "REVV";
+    // solhint-disable-next-line const-name-snakecase
     string public constant override symbol = "REVV";
+    // solhint-disable-next-line const-name-snakecase
     uint8 public constant override decimals = 18;
 
     constructor(address[] memory holders, uint256[] memory amounts) public ERC20WithOperators() {
