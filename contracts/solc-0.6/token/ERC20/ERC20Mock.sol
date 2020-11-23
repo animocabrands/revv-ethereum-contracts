@@ -7,11 +7,11 @@ import "@animoca/ethereum-contracts-erc20_base/contracts/token/ERC20/ERC20WithOp
 
 contract ERC20MintableMock is ERC20, Ownable {
     // solhint-disable-next-line const-name-snakecase
-    string public override constant name = "ERC20";
+    string public constant override name = "ERC20";
     // solhint-disable-next-line const-name-snakecase
-    string public override constant symbol = "E20";
+    string public constant override symbol = "ER20";
     // solhint-disable-next-line const-name-snakecase
-    uint8 public override constant decimals = 18;
+    uint8 public constant override decimals = 18;
 
     constructor(address[] memory tos, uint256[] memory amounts) public {
         batchMint(tos, amounts);
@@ -28,11 +28,11 @@ contract ERC20MintableMock is ERC20, Ownable {
 
 contract ERC20WithOperatorsMintableMock is ERC20WithOperators {
     // solhint-disable-next-line const-name-snakecase
-    string public override constant name = "ERC20";
+    string public constant override name = "ERC20";
     // solhint-disable-next-line const-name-snakecase
-    string public override constant symbol = "ERC20";
+    string public constant override symbol = "ERC20";
     // solhint-disable-next-line const-name-snakecase
-    uint8 public override constant decimals = 18;
+    uint8 public constant override decimals = 18;
 
     constructor(address[] memory tos, uint256[] memory amounts) public {
         batchMint(tos, amounts);

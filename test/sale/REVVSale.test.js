@@ -22,9 +22,8 @@ describe('REVVSale', function () {
     [deployer, purchaser, payout] = await web3.eth.getAccounts();
   });
   beforeEach(async function () {
-    const DAI = artifacts.require('ERC20Mock');
-    this.dai = await DAI.new(toWei('100000000'), {from: deployer});
-    await this.dai.transfer(purchaser, toWei('100000000'), {from: deployer});
+    const DAI = artifacts.require('ERC20MintableMock');
+    this.dai = await DAI.new([purchaser], [toWei('100000000')], {from: deployer});
 
     const REVV = artifacts.require('REVV');
     this.revv = await REVV.new([deployer], [toWei(totalSupply)], {from: deployer});
