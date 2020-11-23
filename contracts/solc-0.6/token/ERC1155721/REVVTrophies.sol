@@ -23,12 +23,14 @@ contract REVVTrophies is AssetsInventory, ERC20Fees, CoreMetadataDelegator, Mint
     using UInt256ToDecimalString for uint256;
     using Bytes32ToBase32String for bytes32;
 
+    // solhint-disable-next-line const-name-snakecase
     string public constant override name = "REVV Trophies";
+    // solhint-disable-next-line const-name-snakecase
     string public constant override symbol = "REVV-T";
     string private _uriPrefix = "https://revvmotorsport.com/trophies/json/";
-    uint256 private constant _nfMaskLength = 32;
+    uint256 private constant _NF_MASK_LENGTH = 32;
 
-    constructor(address gasTokenAddress, address payoutWallet) public AssetsInventory(_nfMaskLength) ERC20Fees(gasTokenAddress, payoutWallet) {}
+    constructor(address gasTokenAddress, address payoutWallet) public AssetsInventory(_NF_MASK_LENGTH) ERC20Fees(gasTokenAddress, payoutWallet) {}
 
     function setInventoryMetadataImplementer(address implementer) external onlyOwner {
         _setInventoryMetadataImplementer(implementer);
