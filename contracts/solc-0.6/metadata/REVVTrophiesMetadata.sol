@@ -1,18 +1,18 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.6.6;
+pragma solidity ^0.6.8;
 
 import "@animoca/ethereum-contracts-assets_inventory/contracts/metadata/InventoryMetadata.sol";
 
 contract REVVTrophiesMetadata is InventoryMetadata {
-    uint256 private constant _nfMaskLength = 32;
+    uint256 internal constant NF_MASK_LENGTH = 32;
 
     modifier onlyDelegator() {
-        require(msg.sender == inventoryMetadataDelegator, "InventoryMetadata: delegator only");
+        require(msg.sender == inventoryMetadataDelegator, "Metadata: delegator only");
         _;
     }
 
-    constructor(address delegator) public InventoryMetadata(_nfMaskLength, delegator) {
+    constructor(address delegator) public InventoryMetadata(NF_MASK_LENGTH, delegator) {
         _setAttribute(_defaultNonFungibleLayout, "type", 8, 240);
         _setAttribute(_defaultNonFungibleLayout, "subType", 8, 232);
         _setAttribute(_defaultNonFungibleLayout, "season", 8, 224);

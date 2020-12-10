@@ -24,6 +24,7 @@ contract REVVSale is FixedPricesSale {
         address payable payoutWallet_
     ) public FixedPricesSale(payoutWallet_, 64, 32) {
         require(revv_ != address(0), "REVVSale: zero address REVV ");
+        // solhint-disable-next-line reason-string
         require(deltaTimeInventory_ != address(0), "REVVSale: zero address inventory ");
         revv = IERC20(revv_);
         deltaTimeInventory = IERC721(deltaTimeInventory_);

@@ -1,97 +1,171 @@
-// const {accounts, contract, web3} = require('@openzeppelin/test-environment');
-// const {ether, expectEvent, expectRevert} = require('@openzeppelin/test-helpers');
-// const {ZeroAddress, Zero, One, Two} = require('@animoca/ethereum-contracts-core_library').constants;
-// const {asciiToHex, padLeft, toBN, toHex} = web3.utils;
+const {artifacts, web3} = require('hardhat');
+const {BN} = web3.utils;
+const {ether, expectEvent, expectRevert} = require('@openzeppelin/test-helpers');
+const {constants} = require('@animoca/ethereum-contracts-core_library');
+const env = require('hardhat');
+const {ZeroAddress, EmptyByte, MaxUInt256} = constants;
+const {Fungible, NonFungible} = require('@animoca/blockchain-inventory_metadata').inventoryIds;
 
-const {expect} = require('chai');
-const {waffle, ethers} = require('hardhat');
-const {constants, utils, BigNumber, getContractFactory} = ethers;
-const {deployContract, link, createFixtureLoader, provider} = waffle;
+const nfMaskLength = 32; // constant fixed in the contract implementation
 
-const {initContracts} = require('./GameeVouchers.fixtures');
-
-const {EthAddress} = require('../../src/constants');
-
-const [deployer, openSeaProxy, recipent1, recipient2] = provider.getWallets();
-
-// This is a workaround as described in https://github.com/nomiclabs/hardhat/issues/849
-// import loadFixture from waffle when fixed
-const loadFixture = waffle.createFixtureLoader([deployer, purchaser, payout], provider);
+let deployer, payout, owner, operator;
 
 describe('GameeVouchers', function () {
-  describe('batchMint()', function () {
-    // it('reverts if purchaser is not an NFT owner', async function () {
-    //   const {contracts, params} = await loadFixture(initContracts);
-    //   console.log(contracts.sale.address);
+  before(async function () {
+    [deployer, payout, owner, operator] = await web3.eth.getAccounts();
+  });
 
-    //   const quantity = constants.Two;
-    //   const paymentToken = EthAddress;
+  beforeEach(async function () {
+    const GameeVouchers = artifacts.require('GameeVouchers');
+    this.gameeVouchers = await GameeVouchers.new({from: deployer});
+  });
 
-    //   await expect(
-    //     contracts.sale.connect(purchaser).purchaseFor(purchaser.address, paymentToken, params.sku, quantity, '0x', {
-    //       value: params.ethPrice.mul(constants.Two),
-    //     })
-    //   ).to.be.revertedWith('REVVSale: must be a NFT owner');
-    // });
-
-    it('should mint for a staker successfully', async function () {
-      const {contracts, params} = await loadFixture(initContracts);
-
-      const quantity = constants.One;
-      const paymentToken = EthAddress;
-
-      await expect(
-        contracts.gameeVouchers.batchMint(purchaser.address, paymentToken, params.sku, quantity, '0x', {
-          value: params.ethPrice,
-        })
-      )
-        .to.emit(contracts.gameeVouchers, 'TransferBatch')
-        .withArgs(
-          purchaser.address,
-          purchaser.address,
-          paymentToken,
-          params.sku,
-          quantity,
-          '0x',
-          params.ethPrice,
-          [],
-          [],
-          []
-        )
-        .to.emit(contracts.revv, 'Transfer')
-        .withArgs(contracts.sale.address, purchaser.address, utils.parseEther('1'));
+  describe('createCollection', function () {
+    it('should revert if not called by the owner', async function () {
+      await expectRevert(
+        this.gameeVouchers.createCollection(Fungible.makeCollectionId(1), {from: payout}),
+        'Ownable: caller is not the owner'
+      );
     });
 
-    for (let i = 0; i < 500; ++i) {
-      it('should purchase successfully with DAI' + i, async function () {
-        const {contracts, params} = await loadFixture(initContracts);
-        console.log(contracts.sale.address);
+    it('should revert when creating a non-fungible collection', async function () {
+      await expectRevert(
+        this.gameeVouchers.createCollection(NonFungible.makeCollectionId(1, nfMaskLength), {from: deployer}),
+        'GameeVouchers: only fungibles'
+      );
+    });
 
-        const quantity = constants.One;
-        const paymentToken = contracts.dai.address;
-        await contracts.dai.connect(purchaser).approve(contracts.sale.address, utils.parseEther('100000000'));
+    it('should revert if called again for the same id', async function () {
+      this.gameeVouchers.createCollection(Fungible.makeCollectionId(1), {from: deployer});
+      await expectRevert(
+        this.gameeVouchers.createCollection(Fungible.makeCollectionId(1), {from: deployer}),
+        'Inventory: existing collection'
+      );
+    });
 
-        await expect(
-          contracts.sale.connect(purchaser).purchaseFor(purchaser.address, paymentToken, params.sku, quantity, '0x', {
-            value: params.ethPrice,
-          })
-        )
-          .to.emit(contracts.sale, 'Purchase')
-          .withArgs(
-            purchaser.address,
-            purchaser.address,
-            paymentToken,
-            params.sku,
-            quantity,
-            '0x',
-            params.daiPrice,
-            [],
-            [],
-            []
-          )
-          .to.emit(contracts.revv, 'Transfer')
-          .withArgs(contracts.sale.address, purchaser.address, utils.parseEther('1'));
+    it('should emit a CollectionCreated event and set the creator', async function () {
+      const collectionId = Fungible.makeCollectionId(1);
+      const receipt = await this.gameeVouchers.createCollection(collectionId, {from: deployer});
+      expectEvent(receipt, 'CollectionCreated', {
+        collectionId,
+        fungible: true,
       });
-    }
+      expect(await this.gameeVouchers.creator(collectionId)).to.equal(deployer);
+    });
+  });
+
+  describe('batchMint', function () {
+    it('should revert if not called by a minter', async function () {
+      await expectRevert(
+        this.gameeVouchers.batchMint(owner, [Fungible.makeCollectionId(1)], ['10'], {from: payout}),
+        'MinterRole: caller does not have the Minter role'
+      );
+    });
+
+    it('should revert if minting to the zero address', async function () {
+      await expectRevert(
+        this.gameeVouchers.batchMint(ZeroAddress, [Fungible.makeCollectionId(1)], ['10'], {from: deployer}),
+        'Inventory: transfer to zero'
+      );
+    });
+
+    it('should revert when minting a non-fungible token', async function () {
+      await expectRevert(
+        this.gameeVouchers.batchMint(owner, [NonFungible.makeTokenId(1, 1, nfMaskLength)], [1], {from: deployer}),
+        'GameeVouchers: only fungibles'
+      );
+    });
+
+    it('should revert if minting more than the total possible supply', async function () {
+      this.gameeVouchers.batchMint(owner, [Fungible.makeCollectionId(1)], [MaxUInt256], {from: deployer});
+      await expectRevert(
+        this.gameeVouchers.batchMint(owner, [Fungible.makeCollectionId(1)], [1], {from: deployer}),
+        'SafeMath: addition overflow'
+      );
+    });
+
+    it('should emit a TransferBatch event', async function () {
+      const ids = [Fungible.makeCollectionId(1)];
+      const values = [1];
+      const receipt = await this.gameeVouchers.batchMint(owner, ids, values, {from: deployer});
+      expectEvent(receipt, 'TransferBatch', {
+        _operator: deployer,
+        _from: constants.ZeroAddress,
+        _to: owner,
+        _ids: ids,
+        _values: values,
+      });
+    });
+
+    it('should succeed when minting to a non-receiver contract', async function () {
+      const ids = [Fungible.makeCollectionId(1)];
+      const values = [1];
+      const NonReceiverContract = artifacts.require('REVV');
+      const nonReceiverContract = await NonReceiverContract.new([], [], {from: deployer});
+      await this.gameeVouchers.batchMint(nonReceiverContract.address, ids, values, {from: deployer});
+    });
+  });
+
+  describe('safeBatchMint', function () {
+    it('should revert if not called by a minter', async function () {
+      await expectRevert(
+        this.gameeVouchers.safeBatchMint(owner, [Fungible.makeCollectionId(1)], ['10'], EmptyByte, {from: payout}),
+        'MinterRole: caller does not have the Minter role'
+      );
+    });
+
+    it('should revert if minting to the zero address', async function () {
+      await expectRevert(
+        this.gameeVouchers.safeBatchMint(ZeroAddress, [Fungible.makeCollectionId(1)], ['10'], EmptyByte, {
+          from: deployer,
+        }),
+        'Inventory: transfer to zero'
+      );
+    });
+
+    it('should revert when minting a non-fungible token', async function () {
+      await expectRevert(
+        this.gameeVouchers.safeBatchMint(owner, [NonFungible.makeTokenId(1, 1, nfMaskLength)], [1], EmptyByte, {
+          from: deployer,
+        }),
+        'GameeVouchers: only fungibles'
+      );
+    });
+
+    it('should revert if minting more than the total possible supply', async function () {
+      this.gameeVouchers.safeBatchMint(owner, [Fungible.makeCollectionId(1)], [MaxUInt256], EmptyByte, {
+        from: deployer,
+      });
+      await expectRevert(
+        this.gameeVouchers.safeBatchMint(owner, [Fungible.makeCollectionId(1)], [1], EmptyByte, {from: deployer}),
+        'SafeMath: addition overflow'
+      );
+    });
+
+    it('should emit a TransferBatch event', async function () {
+      const ids = [Fungible.makeCollectionId(1)];
+      const values = [1];
+      const receipt = await this.gameeVouchers.safeBatchMint(owner, ids, values, EmptyByte, {from: deployer});
+      expectEvent(receipt, 'TransferBatch', {
+        _operator: deployer,
+        _from: constants.ZeroAddress,
+        _to: owner,
+        _ids: ids,
+        _values: values,
+      });
+    });
+
+    it('should fail when minting to a non-receiver contract', async function () {
+      const ids = [Fungible.makeCollectionId(1)];
+      const values = [1];
+      const NonReceiverContract = artifacts.require('REVV');
+      const nonReceiverContract = await NonReceiverContract.new([], [], {from: deployer});
+      await expectRevert(
+        this.gameeVouchers.safeBatchMint(nonReceiverContract.address, ids, values, EmptyByte, {from: deployer}),
+        env.network.name === 'hardhat'
+          ? "Transaction reverted: function selector was not recognized and there's no fallback function"
+          : 'revert'
+      );
+    });
   });
 });

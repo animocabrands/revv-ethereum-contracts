@@ -11,7 +11,7 @@ module.exports = {
   },
   rules: {
     'prettier/prettier': 'error',
-    // "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+    'no-unused-vars': ['error', {argsIgnorePattern: '^_'}],
     'no-unused-vars': 'off',
     'no-multi-spaces': ['error', {exceptions: {VariableDeclarator: true}}],
     'no-else-return': ['error', {allowElseIf: true}],

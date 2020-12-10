@@ -1,22 +1,21 @@
-// require('solidity-coverage');
-require('@nomiclabs/hardhat-solhint');
-require('@nomiclabs/hardhat-ethers'); // imported by @nomiclabs/hardhat-waffle
-require('@nomiclabs/hardhat-waffle');
-// require('hardhat-deploy');
-// require('hardhat-deploy-ethers');
+require('./plugins/hardhat-flatten-all');
+require('./plugins/hardhat-solidity-docgen');
+require('./plugins/hardhat-import-artifacts');
+require('./plugins/hardhat-solidity-coverage');
+require('@nomiclabs/hardhat-truffle5');
+require('hardhat-gas-reporter');
 
 module.exports = {
+  paths: {
+    flattened: 'contracts_flattened',
+  },
+  imports: ['artifacts_imported'],
   solidity: {
+    docgen: {
+      input: 'contracts/solc-0.6',
+      templates: 'docs-template',
+    },
     compilers: [
-      {
-        version: '0.5.16',
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 200,
-          },
-        },
-      },
       {
         version: '0.6.8',
         settings: {
@@ -39,5 +38,8 @@ module.exports = {
         },
       },
     },
+  },
+  gasReporter: {
+    enabled: process.env.REPORT_GAS ? true : false,
   },
 };

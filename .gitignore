@@ -10,7 +10,13 @@ artifacts/*
 contractsInfo.json
 
 coverage*
+.coverage*
+smartcheck*
+contracts_flattened/
+docs/
 
+
+yarn-error.log
 node_modules/
 
-yarn.error.log
+.DS_Store

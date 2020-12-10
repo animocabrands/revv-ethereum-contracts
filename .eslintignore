@@ -1,5 +1,6 @@
 artifacts/
 cache/
 coverage/
+contracts_flattened/
 node_modules/
 package.json
