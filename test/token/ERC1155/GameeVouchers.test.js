@@ -43,15 +43,12 @@ describe('GameeVouchers', function () {
       );
     });
 
-    it('should emit a CollectionCreated and a URI events, set the creator', async function () {
+    it('should emit a CollectionCreated event and set the creator', async function () {
       const collectionId = Fungible.makeCollectionId(1);
       const receipt = await this.gameeVouchers.createCollection(collectionId, {from: deployer});
       expectEvent(receipt, 'CollectionCreated', {
         collectionId,
         fungible: true,
-      });
-      expectEvent(receipt, 'URI', {
-        _id: collectionId,
       });
       expect(await this.gameeVouchers.creator(collectionId)).to.equal(deployer);
     });
@@ -68,7 +65,7 @@ describe('GameeVouchers', function () {
     it('should revert if minting to the zero address', async function () {
       await expectRevert(
         this.gameeVouchers.batchMint(ZeroAddress, [Fungible.makeCollectionId(1)], ['10'], {from: deployer}),
-        'Inventory: zero address'
+        'Inventory: transfer to zero'
       );
     });
 
@@ -122,7 +119,7 @@ describe('GameeVouchers', function () {
         this.gameeVouchers.safeBatchMint(ZeroAddress, [Fungible.makeCollectionId(1)], ['10'], EmptyByte, {
           from: deployer,
         }),
-        'Inventory: zero address'
+        'Inventory: transfer to zero'
       );
     });
 
