@@ -1,13 +1,13 @@
 {
   "name": "@animocabrands/revv-ethereum-contracts",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "REVV Solidity Contracts",
   "repository": "git@gitlab.outblaze.net:revv/ethereum/contracts/revv-ethereum-contracts.git",
   "author": "Animoca Brands",
   "license": "ISC",
   "devDependencies": {
     "@animoca/blockchain-inventory_metadata": "^0.0.1",
-    "@animoca/ethereum-contracts-assets_inventory": "=5.0.0",
+    "@animoca/ethereum-contracts-assets_inventory": "=6.0.0",
     "@animoca/ethereum-contracts-core_library": "=3.1.1",
     "@animoca/ethereum-contracts-erc20_base": "=3.0.0",
     "@animoca/ethereum-contracts-nft_staking": "=4.0.0",
