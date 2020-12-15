@@ -54,78 +54,24 @@ describe('GameeVouchers', function () {
     });
   });
 
-  describe('batchMint', function () {
-    it('should revert if not called by a minter', async function () {
-      await expectRevert(
-        this.gameeVouchers.batchMint(owner, [Fungible.makeCollectionId(1)], ['10'], {from: payout}),
-        'MinterRole: caller does not have the Minter role'
-      );
-    });
-
-    it('should revert if minting to the zero address', async function () {
-      await expectRevert(
-        this.gameeVouchers.batchMint(ZeroAddress, [Fungible.makeCollectionId(1)], ['10'], {from: deployer}),
-        'Inventory: transfer to zero'
-      );
-    });
-
-    it('should revert when minting a non-fungible token', async function () {
-      await expectRevert(
-        this.gameeVouchers.batchMint(owner, [NonFungible.makeTokenId(1, 1, nfMaskLength)], [1], {from: deployer}),
-        'GameeVouchers: only fungibles'
-      );
-    });
-
-    it('should revert if minting more than the total possible supply', async function () {
-      this.gameeVouchers.batchMint(owner, [Fungible.makeCollectionId(1)], [MaxUInt256], {from: deployer});
-      await expectRevert(
-        this.gameeVouchers.batchMint(owner, [Fungible.makeCollectionId(1)], [1], {from: deployer}),
-        'SafeMath: addition overflow'
-      );
-    });
-
-    it('should emit a TransferBatch event', async function () {
-      const ids = [Fungible.makeCollectionId(1)];
-      const values = [1];
-      const receipt = await this.gameeVouchers.batchMint(owner, ids, values, {from: deployer});
-      expectEvent(receipt, 'TransferBatch', {
-        _operator: deployer,
-        _from: constants.ZeroAddress,
-        _to: owner,
-        _ids: ids,
-        _values: values,
-      });
-    });
-
-    it('should succeed when minting to a non-receiver contract', async function () {
-      const ids = [Fungible.makeCollectionId(1)];
-      const values = [1];
-      const NonReceiverContract = artifacts.require('REVV');
-      const nonReceiverContract = await NonReceiverContract.new([], [], {from: deployer});
-      await this.gameeVouchers.batchMint(nonReceiverContract.address, ids, values, {from: deployer});
-    });
-  });
-
   describe('safeBatchMint', function () {
     it('should revert if not called by a minter', async function () {
       await expectRevert(
-        this.gameeVouchers.safeBatchMint(owner, [Fungible.makeCollectionId(1)], ['10'], EmptyByte, {from: payout}),
+        this.gameeVouchers.safeBatchMint(owner, [Fungible.makeCollectionId(1)], ['10'], '0x', {from: payout}),
         'MinterRole: caller does not have the Minter role'
       );
     });
 
     it('should revert if minting to the zero address', async function () {
       await expectRevert(
-        this.gameeVouchers.safeBatchMint(ZeroAddress, [Fungible.makeCollectionId(1)], ['10'], EmptyByte, {
-          from: deployer,
-        }),
+        this.gameeVouchers.safeBatchMint(ZeroAddress, [Fungible.makeCollectionId(1)], ['10'], '0x', {from: deployer}),
         'Inventory: transfer to zero'
       );
     });
 
     it('should revert when minting a non-fungible token', async function () {
       await expectRevert(
-        this.gameeVouchers.safeBatchMint(owner, [NonFungible.makeTokenId(1, 1, nfMaskLength)], [1], EmptyByte, {
+        this.gameeVouchers.safeBatchMint(owner, [NonFungible.makeTokenId(1, 1, nfMaskLength)], [1], '0x', {
           from: deployer,
         }),
         'GameeVouchers: only fungibles'
@@ -133,19 +79,17 @@ describe('GameeVouchers', function () {
     });
 
     it('should revert if minting more than the total possible supply', async function () {
-      this.gameeVouchers.safeBatchMint(owner, [Fungible.makeCollectionId(1)], [MaxUInt256], EmptyByte, {
-        from: deployer,
-      });
+      this.gameeVouchers.safeBatchMint(owner, [Fungible.makeCollectionId(1)], [MaxUInt256], '0x', {from: deployer});
       await expectRevert(
-        this.gameeVouchers.safeBatchMint(owner, [Fungible.makeCollectionId(1)], [1], EmptyByte, {from: deployer}),
-        'SafeMath: addition overflow'
+        this.gameeVouchers.safeBatchMint(owner, [Fungible.makeCollectionId(1)], [1], '0x', {from: deployer}),
+        'Inventory: supply overflow'
       );
     });
 
     it('should emit a TransferBatch event', async function () {
       const ids = [Fungible.makeCollectionId(1)];
       const values = [1];
-      const receipt = await this.gameeVouchers.safeBatchMint(owner, ids, values, EmptyByte, {from: deployer});
+      const receipt = await this.gameeVouchers.safeBatchMint(owner, ids, values, '0x', {from: deployer});
       expectEvent(receipt, 'TransferBatch', {
         _operator: deployer,
         _from: constants.ZeroAddress,
@@ -161,10 +105,8 @@ describe('GameeVouchers', function () {
       const NonReceiverContract = artifacts.require('REVV');
       const nonReceiverContract = await NonReceiverContract.new([], [], {from: deployer});
       await expectRevert(
-        this.gameeVouchers.safeBatchMint(nonReceiverContract.address, ids, values, EmptyByte, {from: deployer}),
-        env.network.name === 'hardhat'
-          ? "Transaction reverted: function selector was not recognized and there's no fallback function"
-          : 'revert'
+        this.gameeVouchers.safeBatchMint(nonReceiverContract.address, ids, values, '0x', {from: deployer}),
+        'revert'
       );
     });
   });
