@@ -43,20 +43,14 @@ contract REVVInventory is
     /**
      * @dev See {IERC1155721InventoryMintable-mint(address,uint256)}.
      */
-    function mint(
-        address to,
-        uint256 nftId
-    ) external override onlyMinter {
+    function mint(address to, uint256 nftId) external override onlyMinter {
         _mint_ERC721(to, nftId, "", false);
     }
 
     /**
      * @dev See {IERC1155721InventoryMintable-batchMint(address,uint256[])}.
      */
-    function batchMint(
-        address to,
-        uint256[] calldata nftIds
-    ) external override onlyMinter {
+    function batchMint(address to, uint256[] calldata nftIds) external override onlyMinter {
         _batchMint_ERC721(to, nftIds);
     }
 
@@ -99,11 +93,10 @@ contract REVVInventory is
     //                                 User Public Functions
     // ===================================================================================================
 
-
     /**
      * @dev See {IERC1155InventoryCreator-creator(uint256)}.
      */
-    function creator(uint256 collectionId) external override view returns(address) {
+    function creator(uint256 collectionId) external view override returns (address) {
         require(!isNFT(collectionId), "Inventory: not a collection");
         return _creators[collectionId];
     }
@@ -145,7 +138,7 @@ contract REVVInventory is
     //                                  ERC1155 Internal Functions
     // ===================================================================================================
 
-    function _uri(uint256 id) internal override(ERC1155InventoryBase, BaseMetadataURI) view returns (string memory) {
+    function _uri(uint256 id) internal view override(ERC1155InventoryBase, BaseMetadataURI) returns (string memory) {
         return BaseMetadataURI._uri(id);
     }
 }
