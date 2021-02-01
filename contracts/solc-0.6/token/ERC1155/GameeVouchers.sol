@@ -2,12 +2,12 @@
 
 pragma solidity ^0.6.8;
 
-import "@animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/ERC1155Inventory.sol";
-import "@animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155InventoryMintable.sol";
-import "@animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155InventoryBurnable.sol";
-import "@animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155InventoryCreator.sol";
-import "@animoca/ethereum-contracts-assets_inventory/contracts/metadata/BaseMetadataURI.sol";
-import "@animoca/ethereum-contracts-core_library/contracts/access/MinterRole.sol";
+import "@animoca/ethereum-contracts-assets_inventory-6/contracts/token/ERC1155/ERC1155Inventory.sol";
+import "@animoca/ethereum-contracts-assets_inventory-6/contracts/token/ERC1155/IERC1155InventoryMintable.sol";
+import "@animoca/ethereum-contracts-assets_inventory-6/contracts/token/ERC1155/IERC1155InventoryBurnable.sol";
+import "@animoca/ethereum-contracts-assets_inventory-6/contracts/token/ERC1155/IERC1155InventoryCreator.sol";
+import "@animoca/ethereum-contracts-assets_inventory-6/contracts/metadata/BaseMetadataURI.sol";
+import "@animoca/ethereum-contracts-core_library-3/contracts/access/MinterRole.sol";
 
 contract GameeVouchers is
     ERC1155Inventory,

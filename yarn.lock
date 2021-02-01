@@ -9,17 +9,39 @@
   dependencies:
     big-integer "^1.6.48"
 
-"@animoca/ethereum-contracts-assets_inventory-7@npm:@animoca/ethereum-contracts-assets_inventory@7.0.2":
-  version "7.0.2"
-  resolved "https://registry.yarnpkg.com/@animoca/ethereum-contracts-assets_inventory/-/ethereum-contracts-assets_inventory-7.0.2.tgz#a08bd0439ba1364e23ee24b187698a7553e59418"
-  integrity sha512-06XoH2IrtmwJ0xBN//QacpL/OeldLqt6VMGZGymXWwXUgX/7dj9IllreD2whpLWDGJJlCDTI3dRCYnx3jOwBoA==
-
-"@animoca/ethereum-contracts-assets_inventory@=6.0.0":
+"@animoca/ethereum-contracts-assets_inventory-6@npm:@animoca/ethereum-contracts-assets_inventory@6.0.0":
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/@animoca/ethereum-contracts-assets_inventory/-/ethereum-contracts-assets_inventory-6.0.0.tgz#fbda7334cba1c1b9bce1c6ce4e656781f8c38b38"
   integrity sha512-6+fGU6y8qIFTGQ5jFqfqz0Q2pGr+mLwkn9cE01fN9KEl2Ob577+xZlVY+odB9D+L0qypykWmiqPshpfwyJrjjw==
 
-"@animoca/ethereum-contracts-core_library-4@npm:@animoca/ethereum-contracts-core_library@4.0.2":
+"@animoca/ethereum-contracts-assets_inventory@=7.0.2":
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/@animoca/ethereum-contracts-assets_inventory/-/ethereum-contracts-assets_inventory-7.0.2.tgz#a08bd0439ba1364e23ee24b187698a7553e59418"
+  integrity sha512-06XoH2IrtmwJ0xBN//QacpL/OeldLqt6VMGZGymXWwXUgX/7dj9IllreD2whpLWDGJJlCDTI3dRCYnx3jOwBoA==
+
+"@animoca/ethereum-contracts-core_library-3@npm:@animoca/ethereum-contracts-core_library@3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@animoca/ethereum-contracts-core_library/-/ethereum-contracts-core_library-3.1.1.tgz#61d3ef7570e59f9ee597e8262850b4c63661e730"
+  integrity sha512-NHqmEL2PcSIcVYnbLgiv6UFyTTbiYBX8XrrxSf+ZvfyTnfwyRKqQPqQZyoegjh7iJvEO1bi+YzveuQrwOVB97w==
+  dependencies:
+    "@openzeppelin/cli" "^2.8.2"
+    "@openzeppelin/contracts" "^3.1.0"
+    "@openzeppelin/test-environment" "^0.1.4"
+    "@openzeppelin/test-helpers" "^0.5.6"
+    "@truffle/debug-utils" "^4.1.8"
+    async "^3.2.0"
+    chai "^4.2.0"
+    chai-as-promised "^7.1.1"
+    chai-bignumber "^3.0.0"
+    mocha "^8.0.1"
+    solc "^0.6.10"
+    solidity-coverage "^0.7.9"
+    truffle "^5.1.33"
+    truffle-plugin-verify "^0.3.11"
+    truffle-security "^1.7.3"
+    web3-utils "^1.2.9"
+
+"@animoca/ethereum-contracts-core_library@=4.0.2":
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/@animoca/ethereum-contracts-core_library/-/ethereum-contracts-core_library-4.0.2.tgz#39a920cb13b8b30bcbf72da2c39d5f4854c20758"
   integrity sha512-Fuaxr3zBYXXEFxfli7fl6Tr5uGYK4X/+IRN6ywkB2NhI6Pb/HoaAoylZCaWe9AmCcnzL1LK7c/z+ARzl2FxNcw==
@@ -53,28 +75,6 @@
     solidity-docgen "^0.5.11"
     wait-on "^5.2.1"
     web3 "^1.3.3"
-
-"@animoca/ethereum-contracts-core_library@=3.1.1":
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/@animoca/ethereum-contracts-core_library/-/ethereum-contracts-core_library-3.1.1.tgz#61d3ef7570e59f9ee597e8262850b4c63661e730"
-  integrity sha512-NHqmEL2PcSIcVYnbLgiv6UFyTTbiYBX8XrrxSf+ZvfyTnfwyRKqQPqQZyoegjh7iJvEO1bi+YzveuQrwOVB97w==
-  dependencies:
-    "@openzeppelin/cli" "^2.8.2"
-    "@openzeppelin/contracts" "^3.1.0"
-    "@openzeppelin/test-environment" "^0.1.4"
-    "@openzeppelin/test-helpers" "^0.5.6"
-    "@truffle/debug-utils" "^4.1.8"
-    async "^3.2.0"
-    chai "^4.2.0"
-    chai-as-promised "^7.1.1"
-    chai-bignumber "^3.0.0"
-    mocha "^8.0.1"
-    solc "^0.6.10"
-    solidity-coverage "^0.7.9"
-    truffle "^5.1.33"
-    truffle-plugin-verify "^0.3.11"
-    truffle-security "^1.7.3"
-    web3-utils "^1.2.9"
 
 "@animoca/ethereum-contracts-erc20_base@=3.0.0":
   version "3.0.0"

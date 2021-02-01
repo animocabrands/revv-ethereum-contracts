@@ -58,7 +58,9 @@ describe('GameeVouchers', function () {
 
     it('should revert if minting to the zero address', async function () {
       await expectRevert(
-        this.gameeVouchers.safeBatchMint(ZeroAddress, [Fungible.makeCollectionId(1)], ['10'], '0x', {from: deployer}),
+        this.gameeVouchers.safeBatchMint(ZeroAddress, [Fungible.makeCollectionId(1)], ['10'], '0x', {
+          from: deployer,
+        }),
         'Inventory: transfer to zero'
       );
     });
@@ -73,7 +75,9 @@ describe('GameeVouchers', function () {
     });
 
     it('should revert if minting more than the total possible supply', async function () {
-      this.gameeVouchers.safeBatchMint(owner, [Fungible.makeCollectionId(1)], [MaxUInt256], '0x', {from: deployer});
+      this.gameeVouchers.safeBatchMint(owner, [Fungible.makeCollectionId(1)], [MaxUInt256], '0x', {
+        from: deployer,
+      });
       await expectRevert(
         this.gameeVouchers.safeBatchMint(owner, [Fungible.makeCollectionId(1)], [1], '0x', {from: deployer}),
         'Inventory: supply overflow'

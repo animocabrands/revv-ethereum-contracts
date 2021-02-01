@@ -1,1 +1,1 @@
-node_modules/@animoca/ethereum-contracts-core_library-4/.solcover.js
+node_modules/@animoca/ethereum-contracts-core_library/.solcover.js

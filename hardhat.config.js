@@ -1,10 +1,10 @@
-require('@animoca/ethereum-contracts-core_library-4/hardhat-plugins');
+require('@animoca/ethereum-contracts-core_library/hardhat-plugins');
 
 module.exports = {
   paths: {
     flattened: 'contracts_flattened',
   },
-  imports: ['artifacts_imported'],
+  imports: ['artifacts_imported', 'node_modules/@animoca/ethereum-contracts-assets_inventory/artifacts'],
   solidity: {
     docgen: {
       input: 'contracts/solc-0.6',

@@ -1,1 +1,1 @@
-node_modules/@animoca/ethereum-contracts-core_library-4/.mocharc.js
+node_modules/@animoca/ethereum-contracts-core_library/.mocharc.js
