@@ -4,7 +4,7 @@ module.exports = {
   paths: {
     flattened: 'contracts_flattened',
   },
-  imports: ['artifacts_imported', 'node_modules/@animoca/ethereum-contracts-assets_inventory/artifacts'],
+  imports: ['imports', 'node_modules/@animoca/ethereum-contracts-assets_inventory/artifacts'],
   solidity: {
     docgen: {
       input: 'contracts/solc-0.6',

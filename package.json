@@ -7,7 +7,7 @@
   "license": "ISC",
   "devDependencies": {
     "@animoca/blockchain-inventory_metadata": "^0.1.0",
-    "@animoca/ethereum-contracts-assets_inventory": "=7.0.2",
+    "@animoca/ethereum-contracts-assets_inventory": "=7.1.0",
     "@animoca/ethereum-contracts-assets_inventory-6": "npm:@animoca/ethereum-contracts-assets_inventory@6.0.0",
     "@animoca/ethereum-contracts-core_library": "=4.0.2",
     "@animoca/ethereum-contracts-core_library-3": "npm:@animoca/ethereum-contracts-core_library@3.1.1",
@@ -41,15 +41,14 @@
     "doc": "run-s doc:sol",
     "clean:vscode": "rm -rf .vscode/extensions.json .vscode/launch.json .vscode/settings.json",
     "clean:compile": "rm -rf cache",
-    "clean:artifacts:soft": "rm -rf artifacts/@animoca artifacts/@openzeppelin artifacts/build-info artifacts/artifacts_imported && find artifacts/contracts -name '*.dbg.json' -delete",
+    "clean:artifacts:soft": "./.clean-artifacts.sh",
     "clean:artifacts:hard": "rm -rf artifacts",
     "clean:flatten": "rm -rf contracts_flattened",
     "clean:smartcheck": "rm -rf smartcheck*",
     "clean:coverage": "rm -rf coverage* .coverage*",
     "clean:doc": "rm -rf docs",
     "clean": "run-p clean:compile clean:artifacts:soft clean:flatten clean:smartcheck clean:coverage clean:doc",
-    "make:coffee": "run-s format fix clean clean:artifacts:hard compile flatten smartcheck test coverage doc",
-    "make:tiramisu": "run-s make:coffee gas-report",
-    "prepack": "run-s compile clean clean:vscode"
+    "run-all": "run-s format fix clean clean:artifacts:hard compile flatten smartcheck test coverage doc",
+    "prepack": "run-s clean:artifacts:hard compile clean clean:vscode"
   }
 }

@@ -14,10 +14,10 @@
   resolved "https://registry.yarnpkg.com/@animoca/ethereum-contracts-assets_inventory/-/ethereum-contracts-assets_inventory-6.0.0.tgz#fbda7334cba1c1b9bce1c6ce4e656781f8c38b38"
   integrity sha512-6+fGU6y8qIFTGQ5jFqfqz0Q2pGr+mLwkn9cE01fN9KEl2Ob577+xZlVY+odB9D+L0qypykWmiqPshpfwyJrjjw==
 
-"@animoca/ethereum-contracts-assets_inventory@=7.0.2":
-  version "7.0.2"
-  resolved "https://registry.yarnpkg.com/@animoca/ethereum-contracts-assets_inventory/-/ethereum-contracts-assets_inventory-7.0.2.tgz#a08bd0439ba1364e23ee24b187698a7553e59418"
-  integrity sha512-06XoH2IrtmwJ0xBN//QacpL/OeldLqt6VMGZGymXWwXUgX/7dj9IllreD2whpLWDGJJlCDTI3dRCYnx3jOwBoA==
+"@animoca/ethereum-contracts-assets_inventory@=7.1.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@animoca/ethereum-contracts-assets_inventory/-/ethereum-contracts-assets_inventory-7.1.0.tgz#2bf7447fe0e7dd49d4d6907cfcfd62b7d3466002"
+  integrity sha512-Raq6LLfoGdGvskwQNUDm9+bUXqv7xO97syftV/U0PdzwssW3J9B7wN2xwu9lJfKEo4iQhsdUt1HLeB9WufNnCA==
 
 "@animoca/ethereum-contracts-core_library-3@npm:@animoca/ethereum-contracts-core_library@3.1.1":
   version "3.1.1"
