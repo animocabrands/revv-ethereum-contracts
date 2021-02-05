@@ -2,14 +2,21 @@
 
 pragma solidity ^0.6.8;
 
-import "@animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/ERC1155Inventory.sol";
-import "@animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155InventoryMintable.sol";
-import "@animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155InventoryBurnable.sol";
-import "@animoca/ethereum-contracts-assets_inventory/contracts/token/ERC1155/IERC1155InventoryCreator.sol";
-import "@animoca/ethereum-contracts-assets_inventory/contracts/metadata/BaseMetadataURI.sol";
-import "@animoca/ethereum-contracts-core_library/contracts/access/MinterRole.sol";
+import "@animoca/ethereum-contracts-assets_inventory-6/contracts/token/ERC1155/ERC1155Inventory.sol";
+import "@animoca/ethereum-contracts-assets_inventory-6/contracts/token/ERC1155/IERC1155InventoryMintable.sol";
+import "@animoca/ethereum-contracts-assets_inventory-6/contracts/token/ERC1155/IERC1155InventoryBurnable.sol";
+import "@animoca/ethereum-contracts-assets_inventory-6/contracts/token/ERC1155/IERC1155InventoryCreator.sol";
+import "@animoca/ethereum-contracts-assets_inventory-6/contracts/metadata/BaseMetadataURI.sol";
+import "@animoca/ethereum-contracts-core_library-3/contracts/access/MinterRole.sol";
 
-contract GameeVouchers is ERC1155Inventory, IERC1155InventoryMintable, IERC1155InventoryBurnable, IERC1155InventoryCreator, BaseMetadataURI, MinterRole {
+contract GameeVouchers is
+    ERC1155Inventory,
+    IERC1155InventoryMintable,
+    IERC1155InventoryBurnable,
+    IERC1155InventoryCreator,
+    BaseMetadataURI,
+    MinterRole
+{
     // solhint-disable-next-line const-name-snakecase
     string public constant name = "GameeVouchers";
     // solhint-disable-next-line const-name-snakecase
@@ -54,7 +61,7 @@ contract GameeVouchers is ERC1155Inventory, IERC1155InventoryMintable, IERC1155I
         bytes calldata data
     ) external override onlyMinter {
         _safeBatchMint(to, ids, values, data);
-        for (uint256 i; i!= ids.length; ++i) {
+        for (uint256 i; i != ids.length; ++i) {
             require(isFungible(ids[i]), "GameeVouchers: only fungibles");
         }
     }
@@ -66,7 +73,7 @@ contract GameeVouchers is ERC1155Inventory, IERC1155InventoryMintable, IERC1155I
     /**
      * @dev See {IERC1155InventoryCreator-creator(uint256)}.
      */
-    function creator(uint256 collectionId) external override view returns(address) {
+    function creator(uint256 collectionId) external view override returns (address) {
         require(!isNFT(collectionId), "Inventory: not a collection");
         return _creators[collectionId];
     }
@@ -97,7 +104,7 @@ contract GameeVouchers is ERC1155Inventory, IERC1155InventoryMintable, IERC1155I
     //                                  ERC1155 Internal Functions
     // ===================================================================================================
 
-    function _uri(uint256 id) internal override(ERC1155InventoryBase, BaseMetadataURI) view returns (string memory) {
+    function _uri(uint256 id) internal view override(ERC1155InventoryBase, BaseMetadataURI) returns (string memory) {
         return BaseMetadataURI._uri(id);
     }
 }

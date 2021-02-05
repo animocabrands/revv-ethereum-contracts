@@ -3,7 +3,7 @@
 pragma solidity 0.6.8;
 
 import "@animoca/ethereum-contracts-erc20_base/contracts/token/ERC20/ERC20WithOperators.sol";
-import "@animoca/ethereum-contracts-core_library/contracts/access/MinterRole.sol";
+import "@animoca/ethereum-contracts-core_library-3/contracts/access/MinterRole.sol";
 
 /**
  * @title REDP

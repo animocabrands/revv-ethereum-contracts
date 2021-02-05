@@ -22,10 +22,7 @@ describe('GameeVouchers', function () {
 
   describe('createCollection', function () {
     it('should revert if not called by the owner', async function () {
-      await expectRevert(
-        this.gameeVouchers.createCollection(Fungible.makeCollectionId(1), {from: payout}),
-        'Ownable: caller is not the owner'
-      );
+      await expectRevert(this.gameeVouchers.createCollection(Fungible.makeCollectionId(1), {from: payout}), 'Ownable: caller is not the owner');
     });
 
     it('should revert when creating a non-fungible collection', async function () {
@@ -37,10 +34,7 @@ describe('GameeVouchers', function () {
 
     it('should revert if called again for the same id', async function () {
       this.gameeVouchers.createCollection(Fungible.makeCollectionId(1), {from: deployer});
-      await expectRevert(
-        this.gameeVouchers.createCollection(Fungible.makeCollectionId(1), {from: deployer}),
-        'Inventory: existing collection'
-      );
+      await expectRevert(this.gameeVouchers.createCollection(Fungible.makeCollectionId(1), {from: deployer}), 'Inventory: existing collection');
     });
 
     it('should emit a CollectionCreated event and set the creator', async function () {
@@ -64,7 +58,9 @@ describe('GameeVouchers', function () {
 
     it('should revert if minting to the zero address', async function () {
       await expectRevert(
-        this.gameeVouchers.safeBatchMint(ZeroAddress, [Fungible.makeCollectionId(1)], ['10'], '0x', {from: deployer}),
+        this.gameeVouchers.safeBatchMint(ZeroAddress, [Fungible.makeCollectionId(1)], ['10'], '0x', {
+          from: deployer,
+        }),
         'Inventory: transfer to zero'
       );
     });
@@ -79,7 +75,9 @@ describe('GameeVouchers', function () {
     });
 
     it('should revert if minting more than the total possible supply', async function () {
-      this.gameeVouchers.safeBatchMint(owner, [Fungible.makeCollectionId(1)], [MaxUInt256], '0x', {from: deployer});
+      this.gameeVouchers.safeBatchMint(owner, [Fungible.makeCollectionId(1)], [MaxUInt256], '0x', {
+        from: deployer,
+      });
       await expectRevert(
         this.gameeVouchers.safeBatchMint(owner, [Fungible.makeCollectionId(1)], [1], '0x', {from: deployer}),
         'Inventory: supply overflow'
@@ -104,10 +102,7 @@ describe('GameeVouchers', function () {
       const values = [1];
       const NonReceiverContract = artifacts.require('REVV');
       const nonReceiverContract = await NonReceiverContract.new([], [], {from: deployer});
-      await expectRevert(
-        this.gameeVouchers.safeBatchMint(nonReceiverContract.address, ids, values, '0x', {from: deployer}),
-        'revert'
-      );
+      await expectRevert(this.gameeVouchers.safeBatchMint(nonReceiverContract.address, ids, values, '0x', {from: deployer}), 'revert');
     });
   });
 });

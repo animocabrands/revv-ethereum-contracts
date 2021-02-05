@@ -5,16 +5,15 @@
 
 cache/
 artifacts/*
-!artifacts/contracts/
 !artifacts/build-info/
-contractsInfo.json
+!artifacts/contracts/
+!artifacts/imports/
 
 coverage*
 .coverage*
 smartcheck*
 contracts_flattened/
 docs/
-
 
 yarn-error.log
 node_modules/
